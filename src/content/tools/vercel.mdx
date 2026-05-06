@@ -1,0 +1,45 @@
+---
+title: "Vercel"
+slug: vercel
+status: yellow
+oneLiner: "Next.js を簡単にデプロイ、PR ごとに Preview URL"
+icon: "Triangle"
+order: 6
+---
+
+## このツールをひとことで言うと
+
+**Next.js を簡単にデプロイできる**。
+GitHub のリポジトリと連携するだけで、main の更新は本番、PR には自動で Preview URL が発行される。
+
+> 🟡 **一部実体験**：このサイト（field-guide-for-ai-dev）と過去の web3-portfolio の 2 件を運用した範囲。
+
+## 開発フローのどこで使うか
+
+- [Step 7: Vercel Preview で確認する](/workflow#step-7)
+- main に Merge → 本番 URL が自動更新（URL は固定）
+
+## 実際に試したこと
+
+- このサイトを GitHub repo から Import → Public 公開
+- 過去に web3-portfolio をデプロイ、PR Preview を運用
+
+## 効果があったこと
+
+- 設定がほぼゼロ（Framework Preset で Next.js を自動検出）
+- PR Preview URL でレビュー時の「実機確認」がほぼ無料
+
+## 微妙だったこと
+
+- ビルド設定でハマるとログ画面でグルグル見る羽目になる
+- Production と Preview の環境変数を分けないと事故る
+
+## 駆け出しが最初に試すなら
+
+1. GitHub に Public リポジトリを作る
+2. https://vercel.com/new で Import
+3. デフォルトのまま Deploy → 1〜2 分で公開 URL が出る
+
+## 関連
+
+- Case 4: Vercel Preview で確認した（執筆予定）
