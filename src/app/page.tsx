@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { StatusBadge } from "@/components/StatusBadge";
 import { Mermaid } from "@/components/Mermaid";
+import { getAllContentMeta } from "@/lib/mdx";
 
 const TOOLS = [
   {
@@ -74,7 +75,10 @@ const FLOW_CHART = `flowchart TD
     G --> H["8. Merge"]
 `;
 
-export default function Home() {
+export default async function Home() {
+  const cases = await getAllContentMeta("cases");
+  const latestCases = cases.slice(0, 3);
+
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-10 md:px-6 md:py-16">
       <section
@@ -256,22 +260,37 @@ export default function Home() {
           </Link>
         </div>
         <p className="mt-2 text-sm text-[#4B5563]">
-          このサイト自体を作る過程の制作ログ。Case 1〜4 は順次追加予定です。
+          このサイト自体を作る過程の制作ログ。実体験ベースで AI ツールの使いどころを記録しています。
         </p>
-        <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
-          {[1, 2, 3].map((n) => (
-            <div
-              key={n}
-              className="rounded-md border border-dashed border-[#E5E7EB] bg-[#FBFAF7] p-5 text-sm text-[#4B5563]"
-            >
-              <p className="font-semibold text-[#1F2937]">Case {n} 準備中</p>
-              <p className="mt-2 leading-relaxed">
-                Day 11〜13 で公開予定。Claude Code / Codex / Antigravity /
-                Vercel の実体験ログを順に書き起こします。
-              </p>
-            </div>
-          ))}
-        </div>
+        {latestCases.length === 0 ? (
+          <p className="mt-6 rounded-md border border-dashed border-[#E5E7EB] bg-[#FBFAF7] p-5 text-sm text-[#4B5563]">
+            Case はまだありません。
+          </p>
+        ) : (
+          <ul className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+            {latestCases.map((c) => (
+              <li key={c.slug}>
+                <Link
+                  href={`/cases/${c.slug}`}
+                  className="group flex h-full flex-col rounded-md border border-[#E5E7EB] bg-white p-5 transition-colors hover:border-[#2F5D3A] hover:bg-[#F3F0EA] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F5D3A]"
+                >
+                  <div className="flex items-center justify-between">
+                    <StatusBadge status={c.status} />
+                    <time
+                      dateTime={c.date}
+                      className="text-xs text-[#4B5563]"
+                    >
+                      {c.date}
+                    </time>
+                  </div>
+                  <p className="mt-3 text-sm font-semibold leading-snug text-[#1F2937] group-hover:text-[#2F5D3A]">
+                    {c.title}
+                  </p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       <section

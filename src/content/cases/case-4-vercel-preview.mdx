@@ -1,0 +1,58 @@
+---
+title: "Case 4: Vercel Preview と本番デプロイで確認した"
+slug: case-4-vercel-preview
+status: yellow
+date: "2026-05-06"
+tools: ["vercel", "github"]
+---
+
+## やりたかったこと
+
+GitHub の `field-guide-for-ai-dev` リポジトリを Vercel に連携し、
+main の更新で本番、PR ごとに Preview URL が発行される運用を回したかった。
+
+> 🟡 **一部実体験**：このサイト + 過去の web3-portfolio の 2 件運用ベース。
+> 大規模運用や Edge / Serverless 機能までは未経験です。
+
+## 使った AI / ツール
+
+- Vercel（Hobby プラン）
+- GitHub（リポジトリ）
+
+## 実際に投げた指示
+
+実コマンドはほぼゼロ。Vercel Web UI に GitHub アカウントを連携し、
+リポジトリを選択 → Framework Preset で Next.js が自動検出されるので
+そのまま **Deploy**。
+
+## 返ってきた結果
+
+- 約 1〜2 分で本番 URL（`field-guide-for-ai-dev.vercel.app`）が発行
+- main にマージするたびに自動でデプロイ → URL は固定のまま中身が更新
+- PR を出すたびに Preview URL が PR コメントに自動投稿
+
+## 良かった点
+
+- 設定がほぼゼロ。`next.config.ts` が標準なら、Framework Preset で完結
+- Preview URL の自動投稿が、レビュー時の「実機確認」コストをほぼゼロに
+- 本番 URL が固定なので、提出物の URL を 1 本決めれば後から変わらない
+
+## 微妙だった点
+
+- `pnpm-workspace.yaml` の `packages` field 欠落のような設定ミスは
+  ビルドログから読まないとわからない（事前に CI で同等を回しておくと安全）
+- 環境変数を Production / Preview で分けないと、Preview で本番 DB を
+  叩く事故が起きうる（このサイトは AI API 不使用のため該当なし）
+- 古いビルドの Vercel CDN キャッシュが残ることが稀にある（少し待つと解消）
+
+## 駆け出しへのアドバイス
+
+最初は GitHub repo を作って Vercel に Import するだけで十分。
+カスタムドメインや環境変数は後から追加できる。Preview URL を
+「PR レビューの標準フロー」として組み込むと、レビュー体験が変わる。
+
+## 関連
+
+- [Workflow Step 7](/workflow#step-7): Vercel Preview で確認
+- [Workflow Step 8](/workflow#step-8): Merge して公開
+- [/tools/vercel](/tools/vercel)

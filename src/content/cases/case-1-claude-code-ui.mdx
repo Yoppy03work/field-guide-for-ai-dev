@@ -1,0 +1,59 @@
+---
+title: "Case 1: Claude Code に UI 実装を任せた"
+slug: case-1-claude-code-ui
+status: green
+date: "2026-05-06"
+tools: ["claude-code", "vercel"]
+relatedPR: 8
+---
+
+## やりたかったこと
+
+このサイトのホームページ（`/`）と `/about` を、Tailwind v4 + Next.js 16 で
+`docs/03_pages.md` の仕様通りに実装したかった。
+ヒーロー / About の 3 カード / 「まずはここから」誘導 / Mermaid 要約 /
+7 ツールグリッド / Cases プレースホルダ / About 誘導の 7 セクション構成。
+
+## 使った AI / ツール
+
+- Claude Code（実装）
+- Vercel（Preview / 本番デプロイ）
+
+## 実際に投げた指示（要約）
+
+`docs/11_prompts.md` の **P6-1 / P6-2** をそのまま渡し、03_pages.md の
+セクション順に実装してもらった。スタイルは「Tailwind v4 のユーティリティ直書き、
+@apply 禁止、深緑（#2F5D3A）と暖色グレー（#F3F0EA）」と CLAUDE.md / docs に
+書いてある方針を参照する形。
+
+## 返ってきた結果
+
+- 1 PR で 416 行追加（page.tsx 全面置き換え + about/page.tsx 新規）
+- Tailwind の arbitrary value で色指定（CLAUDE.md の方針に準拠）
+- Lucide アイコンマッピング、StatusBadge / Mermaid を組み込み
+- Lighthouse 等の数値は未計測
+
+## 良かった点
+
+- CLAUDE.md にデザイン方針（カラーパレット / 禁止事項）を書いておくと、
+  Tailwind v4 のクラス命名がほぼ一発で決まる
+- 03_pages.md のセクション順をそのまま守ってくれる
+- Lucide アイコンが Lucide v1.x で消えた `Github` の代わりに
+  `ExternalLink` を提案するなど、エッジケースに気付く
+
+## 微妙だった点
+
+- 色味（深緑の濃淡 / 暖色グレーの強度）は 1 回では決まらず、人間が確認
+- スキャフォールドの create-next-app が非空ディレクトリを拒否する仕様で、
+  「sibling dir で scaffold → 必要ファイルだけコピー」の迂回が必要だった
+
+## 駆け出しへのアドバイス
+
+CLAUDE.md にカラー / フォント / 禁止事項を書いておくと、最初の 1 振りの精度が
+大きく上がる。逆に CLAUDE.md が薄いと、何度も振り直すことになる。
+
+## 関連
+
+- [PR #8](https://github.com/Yoppy03work/field-guide-for-ai-dev/pull/8): home + /about
+- [Workflow Step 3](/workflow#step-3): Claude Code に実装を依頼する
+- [/tools/claude-code](/tools/claude-code)
