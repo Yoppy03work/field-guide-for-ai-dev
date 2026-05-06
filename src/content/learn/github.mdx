@@ -5,6 +5,7 @@ status: green
 ---
 
 import { Glossary } from "@/components/Glossary";
+import { MiniTask } from "@/components/MiniTask";
 
 <section id="section-1" className="scroll-mt-24">
 
@@ -95,3 +96,133 @@ GitHub.com にプロジェクトを置くと、世界中からアクセス・コ
 - `git switch -c feature/test` で新しいブランチを作る
 
 </section>
+
+<section id="section-5" className="scroll-mt-24">
+
+## セクション 5: Pull Request とは？
+
+<Glossary
+  term="Pull Request (PR)"
+  oneLine="変更を見てもらう提出箱"
+/>
+
+**具体例**
+
+「この変更を `main` に取り込んでいいですか？」と提案する仕組み。
+作業ブランチで完成した変更を、main にマージする前にレビューを受ける入口。
+
+**何のためにあるか**
+
+- レビューを受けてから本流に取り込むため
+- 変更の意図と差分を 1 か所にまとめて議論できる
+- マージ後も「なぜこの変更を入れたか」を後から追える
+
+**試してみよう**
+
+- 軽微な変更で PR を1つ出してみる
+
+</section>
+
+<section id="section-6" className="scroll-mt-24">
+
+## セクション 6: Review とは？
+
+<Glossary term="Review (レビュー)" oneLine="変更内容の確認" />
+
+**具体例**
+
+「この変数名はもっと分かりやすくしては？」と指摘する。
+コメントで質問・提案を残し、Approve / Request changes でレビュアーが意思表示。
+
+**何のためにあるか**
+
+- 他人の目を通すことでバグや改善点が見つかる
+- チームのコーディング規約・知識を共有できる
+- 後から「なぜこの実装になったか」を読み返せる
+
+**試してみよう**
+
+- 他人の PR にコメントを付けてみる
+
+</section>
+
+<section id="section-7" className="scroll-mt-24">
+
+## セクション 7: Merge とは？
+
+<Glossary
+  term="Merge (マージ)"
+  oneLine="本番の流れに合流させること"
+/>
+
+**具体例**
+
+レビュー OK の PR を `main` に取り込む。
+`main` に入ると、そのコードが本番デプロイの対象になる。
+
+**何のためにあるか**
+
+- レビュー済みの変更だけが本流に入る
+- 取り込みのタイミングと履歴がはっきり残る
+- 後から `git log` で「いつ何が main に入ったか」が追える
+
+**試してみよう**
+
+- 自分の PR をマージしてみる
+
+</section>
+
+<section id="section-8" className="scroll-mt-24">
+
+## セクション 8: Vercel Preview で確認するとは？
+
+<Glossary
+  term="Vercel Preview"
+  oneLine="公開前にお試し画面で見ること"
+/>
+
+**具体例**
+
+PR ごとに `*.vercel.app` の URL が自動で発行される。
+レビュアーはその URL を開けば、実機の画面で動作を確認できる。
+
+**何のためにあるか**
+
+- 本番に出す前にレビュアーが画面で確認できる
+- スマホ・PC など複数の環境で気軽に試せる
+- 「コードだけ読んでも気づけない見た目の崩れ」を拾える
+
+**試してみよう**
+
+- 自分の PR でプレビュー URL を開いてみる
+
+</section>
+
+<section id="section-9" className="scroll-mt-24">
+
+## セクション 9: AI 開発ではどこで Claude Code / Codex / Antigravity を使う？
+
+<Glossary
+  term="AI 開発フロー"
+  oneLine="フローの各ステップで AI を差し込む"
+/>
+
+**具体例**
+
+- Issue 起票 → そのまま **Claude Code** に実装依頼
+- PR 提出 → **Codex** が自動レビュー
+- レビュー後半 → **Antigravity** が画面確認
+
+**何のためにあるか**
+
+- AI を「ツール」ではなく「フローの中の役割」として使うとブレない
+- どの場面でどのツールを使うかが明確になり、迷わない
+- 後から「何を AI に任せ、何を人間が判断したか」が振り返れる
+
+**詳しくは**
+
+- [/workflow](/workflow) で 8 ステップの AI 差し込みポイントを見る
+
+</section>
+
+<MiniTask />
