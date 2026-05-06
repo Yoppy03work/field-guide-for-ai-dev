@@ -13,6 +13,12 @@ const TOC = [
   { id: "section-2", label: "2. リポジトリとは？" },
   { id: "section-3", label: "3. Issue とは？" },
   { id: "section-4", label: "4. Branch とは？" },
+  { id: "section-5", label: "5. Pull Request とは？" },
+  { id: "section-6", label: "6. Review とは？" },
+  { id: "section-7", label: "7. Merge とは？" },
+  { id: "section-8", label: "8. Vercel Preview とは？" },
+  { id: "section-9", label: "9. AI ツールの差し込み" },
+  { id: "mini-task", label: "ミニ課題" },
 ];
 
 export default function LearnGitHubPage() {
@@ -31,11 +37,6 @@ export default function LearnGitHubPage() {
         </header>
 
         <LearnGitHubMdx />
-
-        <footer className="mt-16 rounded-md border border-[#E5E7EB] bg-[#F3F0EA] p-4 text-sm text-[#4B5563]">
-          残り 5 セクション（Pull Request / Review / Merge / Vercel Preview /
-          AI ツール）と最後のミニ課題は、続くプロンプト P4-1 / P4-2 で追加予定。
-        </footer>
       </article>
 
       <aside
