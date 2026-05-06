@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   Bot,
@@ -96,12 +97,12 @@ export default async function ToolDetailPage({
 
       <footer className="mt-16 border-t border-[#E5E7EB] pt-6">
         <p className="text-sm text-[#4B5563]">
-          ← <a
+          ← <Link
             href="/tools"
             className="font-medium text-[#2F5D3A] underline underline-offset-2 hover:text-[#1B5E20]"
           >
             ツール一覧に戻る
-          </a>
+          </Link>
         </p>
       </footer>
     </article>
