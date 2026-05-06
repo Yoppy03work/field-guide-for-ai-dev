@@ -1,0 +1,97 @@
+---
+title: "GitHub 入門"
+slug: github
+status: green
+---
+
+import { Glossary } from "@/components/Glossary";
+
+<section id="section-1" className="scroll-mt-24">
+
+## セクション 1: GitHub って何？
+
+<Glossary term="GitHub" oneLine="チームでコードを共有・保存する場所" />
+
+**具体例**
+
+GitHub.com にプロジェクトを置くと、世界中からアクセス・コラボできる。
+
+**何のためにあるか**
+
+- 1人で開発する場合も、後から「いつどう変えたか」が追える
+- チームで開発する場合は、メンバーで同じプロジェクトを進められる
+- コードのバックアップ場所としても使える
+
+**試してみよう**
+
+- GitHub アカウントを作って、自分用リポジトリを1つ作る
+
+</section>
+
+<section id="section-2" className="scroll-mt-24">
+
+## セクション 2: リポジトリとは？
+
+<Glossary term="リポジトリ (Repository)" oneLine="プロジェクトを置く場所" />
+
+**具体例**
+
+1 つの Web サイトに対して 1 つのリポジトリ。
+（例：このサイト `field-guide-for-ai-dev` も 1 つのリポジトリ）
+
+**何のためにあるか**
+
+- プロジェクト単位で履歴・Issue・PR を管理できる
+- Public / Private でアクセス範囲を切り替えられる
+- ファイル全体の変更履歴がたどれる
+
+**試してみよう**
+
+- 空のリポジトリを作って `README.md` を1行書く
+
+</section>
+
+<section id="section-3" className="scroll-mt-24">
+
+## セクション 3: Issue とは？
+
+<Glossary term="Issue" oneLine="やることメモ" />
+
+**具体例**
+
+「トップページに自己紹介カードを追加する」のような、これからやることを書く場所。
+バグ報告にも使う。
+
+**何のためにあるか**
+
+- 「誰が何をやるか」を見える化する
+- 後から「なぜこの変更をしたか」を追える
+- 議論やフィードバックを 1 か所にまとめられる
+
+**試してみよう**
+
+- 自分のリポジトリで Issue を1つ立てる
+
+</section>
+
+<section id="section-4" className="scroll-mt-24">
+
+## セクション 4: Branch とは？
+
+<Glossary term="Branch (ブランチ)" oneLine="作業用の分岐" />
+
+**具体例**
+
+`feature/profile-card` で作業して、完成したら `main` に取り込む。
+
+**何のためにあるか**
+
+- 他人の作業に影響を与えずに自分の変更を進められる
+- `main` は常に「動く状態」を保てる
+- 並行で複数の機能を進められる
+
+**試してみよう**
+
+- `git switch -c feature/test` で新しいブランチを作る
+
+</section>
