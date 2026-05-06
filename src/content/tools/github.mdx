@@ -1,0 +1,48 @@
+---
+title: "GitHub"
+slug: github
+status: green
+oneLiner: "Issue / Branch / PR / Review / Merge をまとめて管理する場所"
+icon: "GitBranch"
+order: 1
+---
+
+## このツールをひとことで言うと
+
+**Issue / Branch / Pull Request / Review / Merge をまとめて管理する場所**。
+コードのバージョン管理（Git）に、チーム開発を進めるための入れ物が乗ったサービス。
+
+## 開発フローのどこで使うか
+
+このツールはほぼ全てのステップに登場します。
+
+- [Step 1: Issue を立てる](/workflow#step-1)
+- [Step 2: Branch を切る](/workflow#step-2)
+- [Step 4: PR を作る](/workflow#step-4)
+- [Step 7: Vercel Preview](/workflow#step-7)（Vercel 連携の入口）
+
+## 実際に試したこと
+
+- ハッカソンでチーム開発：Issue → PR → Merge の運用
+- このサイトで PR テンプレ運用、CI（GitHub Actions）でビルド検証
+
+## 効果があったこと
+
+- レビュー履歴が PR に残るので、後から「なぜこの実装になったか」を追える
+- Issue / PR / Review のセットが教材として強力（自分用ログにもなる）
+
+## 微妙だったこと
+
+- 通知が多くて埋もれがち
+- 設定項目（Branch protection, Codeowners 等）が初見では多い
+
+## 駆け出しが最初に試すなら
+
+1. Issue を1つ立てる（タイトルと受け入れ基準を書くだけでOK）
+2. Branch を切って軽微な変更（README に1行追加など）を進める
+3. PR を出して merge する流れを、自分のリポジトリで一周してみる
+
+## 関連
+
+- [/learn/github](/learn/github) で用語の入門
+- [/cases](/cases) Case 1〜4（このサイトの PR ログを順次公開予定）
