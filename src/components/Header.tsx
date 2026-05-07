@@ -8,6 +8,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 const NAV_ITEMS = [
   { href: "/learn/github", label: "まずはここから" },
   { href: "/workflow", label: "ワークフロー" },
+  { href: "/tutorials", label: "チュートリアル" },
   { href: "/tools", label: "ツール" },
   { href: "/cases", label: "Cases" },
   { href: "/about", label: "About" },

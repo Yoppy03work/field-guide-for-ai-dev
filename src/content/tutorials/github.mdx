@@ -1,0 +1,107 @@
+---
+title: "GitHub チュートリアル"
+slug: github
+status: green
+estimatedMinutes: 30
+difficulty: beginner
+order: 1
+prerequisites:
+  - "ブラウザ（Chrome / Safari / Firefox など）"
+  - "メールアドレス"
+---
+
+import { Callout } from "@/components/Callout";
+
+<Callout type="info" title="このチュートリアルでやること">
+  GitHub アカウント作成 → 最初のリポジトリ → 最初の Pull Request → マージ
+  までを 30 分でなぞります。終わったら「自分の repo で Issue → PR を回す」
+  動きが体に入ります。
+</Callout>
+
+## 前提
+
+- ブラウザがあれば OK（Git のローカルインストールは任意）
+- メールアドレスが必要（GitHub アカウント用）
+
+## ステップ 1: アカウントを作る
+
+**やること**
+
+1. [https://github.com/signup](https://github.com/signup) を開く
+2. メール / パスワード / ユーザー名を入力
+3. メール認証を完了
+
+**期待される結果**
+
+- ダッシュボード（緑色のアクティビティグリッドが見えるホーム）に着地
+
+**うまくいかない時**
+
+- メールが届かない → 迷惑メールフォルダを確認
+- ユーザー名が使えない → 他の候補を試す（後から変えにくいので慎重に）
+
+## ステップ 2: 最初のリポジトリを作る
+
+**やること**
+
+1. 右上の `+` → `New repository`
+2. Repository name に `hello-world` などを入力
+3. `Public` を選択、`Initialize with README` をチェック
+4. `Create repository`
+
+**期待される結果**
+
+- README.md が見えるリポジトリページに遷移
+
+## ステップ 3: README を編集して直接コミット
+
+**やること**
+
+1. README.md を開いて鉛筆アイコン（Edit）をクリック
+2. 1 行追加（例：「自分の名前」）
+3. 下の `Commit changes...` → `Commit directly to main`
+
+**期待される結果**
+
+- main ブランチに変更が記録され、最新のコミットが見える
+
+## ステップ 4: Branch を切って PR を作る
+
+**やること**
+
+1. README.md を再度編集する画面に入り、別の 1 行を追加
+2. `Commit changes...` → 今度は `Create a new branch and start a pull request` を選ぶ
+3. ブランチ名を `feature/intro` にして `Propose changes`
+4. PR 作成画面で `Create pull request`
+
+**期待される結果**
+
+- 「Open」状態の Pull Request が作成される
+
+**うまくいかない時**
+
+- PR 画面で「Compare base / compare」が main / feature/intro になっているか確認
+
+## ステップ 5: マージする
+
+**やること**
+
+1. PR 画面で `Merge pull request` → `Confirm merge`
+2. ブランチを削除（`Delete branch`）してもよい
+
+**期待される結果**
+
+- main に変更が反映され、PR が「Merged」表示に
+
+## できたか確認
+
+- [ ] GitHub アカウントを作って main に最初のコミットを置けた
+- [ ] feature/intro ブランチで PR を作れた
+- [ ] PR を Merge して main に取り込めた
+- [ ] うまくいかなかった場所を 1 つ説明できる
+
+## 次のステップ
+
+- [/tutorials/vercel](/tutorials/vercel) でこの repo を Vercel に deploy する
+- [/learn/github](/learn/github) で各用語の意味を復習する
+- [/workflow](/workflow) で AI を差し込む 8 ステップを見る

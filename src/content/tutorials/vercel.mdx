@@ -1,0 +1,114 @@
+---
+title: "Vercel チュートリアル"
+slug: vercel
+status: yellow
+estimatedMinutes: 20
+difficulty: beginner
+order: 2
+prerequisites:
+  - "GitHub アカウント"
+  - "公開リポジトリが 1 つある（/tutorials/github を完走しているとベスト）"
+---
+
+import { Callout } from "@/components/Callout";
+
+<Callout type="info" title="このチュートリアルでやること">
+  GitHub の repo を Vercel に連携 → 自動 Preview Deploy → main マージで本番更新、
+  までを 20 分でなぞります。
+</Callout>
+
+## 前提
+
+- GitHub アカウントを持っている
+- 公開リポジトリが 1 つある（[/tutorials/github](/tutorials/github) で作った `hello-world` で OK）
+- Next.js プロジェクトでなくても動く（静的 HTML でも可）が、Next.js 16 が一番スムーズ
+
+## 必須 4 ステップで完走する
+
+カスタムドメインや環境変数は本チュートリアルでは扱いません（DNS や課金が絡んで初心者には重い）。
+「余裕があれば」の節に分けています。
+
+### ステップ 1: GitHub repo と Vercel を連携する
+
+**やること**
+
+1. [https://vercel.com](https://vercel.com) を開いて GitHub でサインイン
+2. `Add New...` → `Project`
+3. リストから対象 repo を選ぶ（無い時は `Adjust GitHub App Permissions`）
+4. Framework Preset で Next.js が自動検出されることを確認
+5. 設定はデフォルトのまま `Deploy`
+
+**期待される結果**
+
+- 1〜2 分で「Congratulations!」画面が出て、本番 URL（`*.vercel.app`）が発行される
+
+**うまくいかない時**
+
+- repo が選択肢に出ない → GitHub App の権限調整で対象 repo を許可
+
+### ステップ 2: Preview Deploy を見る
+
+**やること**
+
+1. 対象 repo に新しいブランチを切って 1 コミット push（README に 1 行追加など）
+2. GitHub 上で Pull Request を作る
+3. PR コメントに Vercel が自動で `Preview` URL を投稿するので開く
+
+**期待される結果**
+
+- ブランチ固有の URL（`*-git-<branch>-*.vercel.app`）で、変更後の状態が見える
+
+**うまくいかない時**
+
+- Preview URL が出ない → Vercel ダッシュボードで Build ログを確認
+
+### ステップ 3: Production Deploy（main マージで自動）を見る
+
+**やること**
+
+1. PR を Merge する
+2. Vercel ダッシュボードで Deployment が main 用に走るのを確認
+3. 本番 URL を再読み込み
+
+**期待される結果**
+
+- 本番 URL（固定）の中身が、PR の変更後の状態に更新される
+
+### ステップ 4: ビルドエラーを読んで直す
+
+**やること**
+
+1. 故意にコード（`page.tsx` など）を壊して push
+2. Vercel ダッシュボード → 失敗した Deployment → Build Logs を開く
+3. エラーメッセージを読み、原因の行を特定して修正
+
+**期待される結果**
+
+- ローカルで `pnpm build` を回しても同じエラーが出ること（Vercel と同じ）
+- 修正コミットを push すると Deployment が green に戻る
+
+**うまくいかない時**
+
+- ローカルで再現しない → Node / pnpm のバージョンが Vercel と揃っているか確認
+
+## できたか確認
+
+- [ ] GitHub repo を Vercel に連携できた
+- [ ] PR ごとに Preview URL が発行されるのを見た
+- [ ] main マージで本番 URL が自動更新されるのを見た
+- [ ] わざと壊してビルドエラーログを読めた
+- [ ] うまくいかなかった場所を 1 つ説明できる
+
+## 余裕があれば
+
+- 環境変数の Production / Preview 分け
+- カスタムドメイン接続（DNS / 所有ドメインが必要）
+- Vercel Analytics の最小プラン
+
+これらは本チュートリアルの範囲外。必要になったら公式ドキュメントを参照。
+
+## 次のステップ
+
+- [/tutorials/antigravity](/tutorials/antigravity) で Preview URL を AI に巡回させる
+- [/tools/vercel](/tools/vercel) で「フローの中での使い方」を整理する
+- [/cases/case-4-vercel-preview](/cases/case-4-vercel-preview) で実例を読む
