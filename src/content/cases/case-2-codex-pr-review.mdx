@@ -7,58 +7,149 @@ tools: ["codex", "github"]
 relatedPR: 9
 ---
 
+import { Callout } from "@/components/Callout";
+
 ## やりたかったこと
 
-このサイトの PR ごとに、人間レビュー前に「型 / lint / build」のチェックを
-自動で回し、ミスを早期に拾いたかった。Codex の自動レビューも併用したい。
+このサイトの PR ごとに、人間レビュー前に「型 / lint / build」のチェックを自動で回し、
+ミスを早期に拾いたかった。Codex の自動レビューも併用して、機械的に潰せる指摘は
+人間レビューに来る前にフィルタしたい。
 
 ## 使った AI / ツール
 
-- GitHub Actions（lint / typecheck / build の CI、`docs/14_github-templates.md` から `.github/workflows/ci.yml`）
-- Codex（PR コメントベースのレビュー、AGENTS.md の観点で実施想定）
+- **GitHub Actions** … lint / typecheck / build の CI、`.github/workflows/ci.yml`
+- **Codex** … PR コメントベースのレビュー、AGENTS.md の観点で実施想定
+- **Vercel Preview** … PR ごとのプレビュー URL（[Case 4](/cases/case-4-vercel-preview)）
 
 ## 実際に投げた指示
 
-PR テンプレ（`.github/PULL_REQUEST_TEMPLATE.md`）に以下の観点リストを置き、
-Codex に「ここ見て」と明示している。
+PR テンプレ（`.github/PULL_REQUEST_TEMPLATE.md`）に観点リストを置き、Codex に
+「ここ見て」と明示する形：
 
+```markdown
+## Codex への指示
+
+このPRをレビューしてほしい観点:
+
+- [ ] TypeScript strict 違反が無いか
+- [ ] Tailwind v4 の `@apply` が混入していないか
+- [ ] インラインスタイルが混入していないか
+- [ ] `<Glossary>` を使うべき用語が生テキストになっていないか
+- [ ] `<StatusBadge>` がページ先頭に置かれているか
+- [ ] アクセシビリティ要件（alt / aria-* / フォーカス可視化）を満たすか
+- [ ] テストが既存の振る舞いを壊していないか
 ```
-- TypeScript strict 違反が無いか
-- Tailwind v4 の @apply が混入していないか
-- インラインスタイルが混入していないか
-- <Glossary> を使うべき用語が生テキストになっていないか
-- <StatusBadge> がページ先頭に置かれているか
-- アクセシビリティ要件（alt / aria-* / フォーカス可視化）を満たすか
+
+CI 側は `.github/workflows/ci.yml`：
+
+```yaml
+name: CI
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm build
 ```
 
 ## 返ってきた結果
 
+### 初回失敗：pnpm workspace の落とし穴
+
 - 最初の CI（PR #2）は **`pnpm-workspace.yaml` の `packages` field 不在**で fail
-  → CI の pnpm を v9 → v10 に揃え、workspace に `packages: ["."]` 追加で復旧
-- それ以降の PR では typecheck / lint / build が安定して green
-- PR #9 では `<a>` タグでの内部 nav に対する `@next/next/no-html-link-for-pages` を
-  lint が拾い、`next/link` への置き換え修正を 1 件取り込んだ
+- エラーログ: `ERROR  packages field missing or empty`
+- 原因: pnpm v10 では workspace の宣言として `packages` を要求する
+- 修正:
+  - CI の pnpm を v9 → v10 に揃える
+  - `pnpm-workspace.yaml` に `packages: ["."]` を追加
+
+### Codex の P1 critical 指摘
+
+PR #9 で Codex が以下を指摘した：
+
+```text
+[P1 critical] Use own-property check for tool slug validation
+slug in TOOL_COMPONENTS also matches inherited keys from Object.prototype,
+so requests like /tools/toString pass this guard, skip notFound(), and
+then crash when getContentBySlug looks for a non-existent file.
+That turns an invalid slug into a 500 instead of a 404; switch the guard
+to Object.hasOwn(TOOL_COMPONENTS, slug).
+```
+
+→ PR #16 で `Object.hasOwn` に置換。`/tools/toString` `/cases/toString` で
+404 を返すことを dev で確認。
+
+### Codex の P2 yellow（複数）
+
+PR #18 で Codex が 4 サイクル指摘：
+
+1. CodeBlock の `catch {}` で clipboard 失敗を握りつぶし → 失敗 UI を表示
+2. ReadingTime の docstring と動作が不一致 → docstring 修正
+3. reading-time.ts の regex `m` フラグで本文中の `---` を frontmatter として誤認 → フラグ削除
+4. CodeBlock コピーボタンが touch 端末で非表示 → 常時表示に
+
+すべて同 PR 内で対応。
+
+### 安定運用フェーズ
+
+それ以降の PR（#10〜#22）では typecheck / lint / build が安定して green。
+Codex は **content-heavy な PR では応答が遅い / 応答しない**傾向があり、
+その場合は CI green を信じて merge し、PR description に状況を明記している。
 
 ## 良かった点
 
-- 「`@apply` 入っちゃった」「any 混入」みたいな機械的事故は CI / lint が一発で拾う
-- pnpm workspace の落とし穴（`packages` 必須）も build ログから即特定できた
+- 「`@apply` 入っちゃった」「any 混入」のような機械的事故は CI / lint が一発で拾う
+- pnpm workspace の落とし穴も build ログから即特定できた
+- Codex の P1 critical（`Object.hasOwn`）は気付きにくいセキュリティ系の指摘で、人間レビューだけでは漏れる可能性が高かった
+- 指摘ごとに「対応 / 対応しない理由 / Issue 化」を PR コメントに残す運用が、後から見返したとき教材として強い
 
 ## 微妙だった点
 
-- 設計判断（このディレクトリ構造でいいか、コンポーネント分割の粒度）は
-  CI / lint の守備範囲外
+- **設計判断（ディレクトリ構造、分割の粒度）は CI / lint の守備範囲外** … 結局人間が読む必要がある
 - CI pnpm のバージョン違いでの初回失敗は、ローカルでは見えない事故
+- Codex は content-heavy な PR では応答しない傾向 → CI green と Vercel Preview を信じる運用に
+- 的外れ指摘もある（10〜20% 程度）。判断は人間が責任を持つ
 
-## 駆け出しへのアドバイス
+## Lessons Learned
 
-PR テンプレに「Codex への指示」「Antigravity への指示」セクションを最初に
-入れておくと、AI レビューの的が絞られる。指示の解像度が上がるほど、
-レビューの精度も上がる。
+1. **CI を最初の PR から回す**: 後から追加すると壊れた状態が当たり前になる
+2. **pnpm のバージョンはローカルと CI で揃える**: `engines` フィールド or workflow の version を明示
+3. **Codex P1 は同 PR で必ず対応**: 重要度を機械的に分類して対応運用を決める
+4. **PR description に Codex 対応欄を入れる**: 「対応済み / 対応しない理由 / Issue 化」が後から読める
+5. **Codex 応答なし = OK の信号ではないが、CI / Vercel green を組み合わせれば信頼度は上がる**
+6. **AI レビューはフィルタ、人間レビューは設計判断**: 役割を混ぜると AI の出力を盲信して事故る
 
-## 関連
+## 自分の repo で試すには
 
-- [PR #2](https://github.com/Yoppy03work/field-guide-for-ai-dev/pull/2): Next.js init + CI 修復
-- [PR #9](https://github.com/Yoppy03work/field-guide-for-ai-dev/pull/9): tools list, lint 修正
-- [Workflow Step 5](/workflow#step-5): Codex にレビュー
-- [/tools/codex](/tools/codex)
+1. [/tutorials/github](/tutorials/github) で repo を作る
+2. `.github/workflows/ci.yml` を置く（このサイトの[内容](https://github.com/Yoppy03work/field-guide-for-ai-dev/blob/main/.github/workflows/ci.yml)を参考に）
+3. Codex を repo に連携（[ChatGPT Codex の Cloud 設定](https://chatgpt.com/codex/cloud/settings/general)）
+4. PR テンプレに「Codex への指示」欄を入れる
+5. PR を 1 つ出して Codex の挙動を見る
+
+最初の PR は小さく作って、CI と Codex のレスポンスを観察するのがおすすめ。
+
+## 次に読むページ
+
+- [/tools/codex](/tools/codex) … Codex の使いどころ全般
+- [/workflow#step-5](/workflow#step-5) … Step 5: Codex にレビュー
+- [/cases/case-1-claude-code-ui](/cases/case-1-claude-code-ui) … この CI を整えた前の Case
+- [PR #2](https://github.com/Yoppy03work/field-guide-for-ai-dev/pull/2) … Next.js init + CI 修復
+- [PR #9](https://github.com/Yoppy03work/field-guide-for-ai-dev/pull/9) … tools list + lint 修正
+- [PR #16](https://github.com/Yoppy03work/field-guide-for-ai-dev/pull/16) … Codex P1（Object.hasOwn）対応
+- [PR #18](https://github.com/Yoppy03work/field-guide-for-ai-dev/pull/18) … Codex P2 ×4 対応

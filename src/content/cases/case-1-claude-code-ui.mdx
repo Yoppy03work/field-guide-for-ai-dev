@@ -7,53 +7,110 @@ tools: ["claude-code", "vercel"]
 relatedPR: 8
 ---
 
+import { Callout } from "@/components/Callout";
+
 ## やりたかったこと
 
 このサイトのホームページ（`/`）と `/about` を、Tailwind v4 + Next.js 16 で
-`docs/03_pages.md` の仕様通りに実装したかった。
-ヒーロー / About の 3 カード / 「まずはここから」誘導 / Mermaid 要約 /
-7 ツールグリッド / Cases プレースホルダ / About 誘導の 7 セクション構成。
+`docs/03_pages.md` の仕様通りに実装したかった。ヒーロー / About の 3 カード /
+「まずはここから」誘導 / Mermaid 要約 / 7 ツールグリッド / Cases プレースホルダ /
+About 誘導の 7 セクション構成。
+
+**仮説**: CLAUDE.md と docs/03_pages.md があれば、Claude Code に任せても
+ぶれずに実装できるはず。
 
 ## 使った AI / ツール
 
-- Claude Code（実装）
+- Claude Code（Sonnet 系の長文脈モード、実装）
 - Vercel（Preview / 本番デプロイ）
 
-## 実際に投げた指示（要約）
+## 実際に投げた指示
 
-`docs/11_prompts.md` の **P6-1 / P6-2** をそのまま渡し、03_pages.md の
-セクション順に実装してもらった。スタイルは「Tailwind v4 のユーティリティ直書き、
-@apply 禁止、深緑（#2F5D3A）と暖色グレー（#F3F0EA）」と CLAUDE.md / docs に
-書いてある方針を参照する形。
+`docs/11_prompts.md` の **P6-1 / P6-2** プロンプトをそのまま使った。
+要約版を抜粋すると：
+
+```text
+【文脈】
+2回目/03_pages.md の「ホーム」セクション構成に厳密に従う。
+旧仕様の「6ツールグリッド主役」ではなく、「まずはここから」を主役にする。
+
+【指示】
+src/app/page.tsx を以下のセクション順で実装:
+1. ヒーロー（h1 + サブ + CTA 2 つ）
+2. このサイトについて（3 行）
+3. 「まずはここから」大カード
+4. AI 開発フロー要約（Mermaid 縮小版）
+5. 7 ツール早見グリッド
+6. 最新 Cases 3 本
+7. About 誘導
+
+【制約】
+- 7 ツール早見はあくまで「補助情報」として中段以降に置く
+- 「まずはここから」が一番目立つように
+- カードのレイアウトは Grid、モバイル 1 列、md 2 列、lg 3〜4 列
+- アニメーションは控えめ（フェードインのみ）
+```
+
+加えて CLAUDE.md には「Tailwind v4 / @apply 禁止 / インラインスタイル禁止 /
+深緑 #2F5D3A / 暖色グレー #F3F0EA」が書いてあり、Claude Code は何も指示しなくても
+それを参照してくれた。
 
 ## 返ってきた結果
 
-- 1 PR で 416 行追加（page.tsx 全面置き換え + about/page.tsx 新規）
-- Tailwind の arbitrary value で色指定（CLAUDE.md の方針に準拠）
-- Lucide アイコンマッピング、StatusBadge / Mermaid を組み込み
-- Lighthouse 等の数値は未計測
+- 1 PR（[PR #8](https://github.com/Yoppy03work/field-guide-for-ai-dev/pull/8)）で
+  416 行追加（page.tsx 全面置き換え + about/page.tsx 新規）
+- 主要ファイル：
+  - `src/app/page.tsx` … 7 セクション構成、CLAUDE.md のカラーパレット準拠
+  - `src/app/about/page.tsx` … タイムライン形式で目的・著者・ライセンス
+- Tailwind の arbitrary value（`bg-[#2F5D3A]` 等）で色指定
+- Lucide アイコンマッピング（Bot / GitBranch / MessageSquare / Code / Eye / Triangle / Sparkles）
+- StatusBadge / Mermaid をインポートして組み込み
+- Lighthouse 等の数値は未計測（Phase 9 で計測予定）
+
+<Callout type="info" title="Vercel Preview の Before/After">
+  PR #8 の Vercel Preview URL でレビューし、main マージで本番反映。
+  本番 URL: [field-guide-for-ai-dev.vercel.app](https://field-guide-for-ai-dev.vercel.app/)
+</Callout>
 
 ## 良かった点
 
-- CLAUDE.md にデザイン方針（カラーパレット / 禁止事項）を書いておくと、
-  Tailwind v4 のクラス命名がほぼ一発で決まる
-- 03_pages.md のセクション順をそのまま守ってくれる
-- Lucide アイコンが Lucide v1.x で消えた `Github` の代わりに
-  `ExternalLink` を提案するなど、エッジケースに気付く
+- CLAUDE.md にデザイン方針（カラー / 禁止事項）を書いておくと、Tailwind v4 のクラス命名がほぼ一発で決まる
+- 03_pages.md のセクション順をそのまま守ってくれる（仕様書の存在価値）
+- Lucide React v1.x で消えた `Github` アイコンの代わりに `ExternalLink` を提案するなど、エッジケースに気付く
+- 「ヒーロー直下に 7 ツールグリッドを置きたくない」という仕様の意図を理解して、中段以降に配置した
+- レスポンシブ（mobile 1 列 / md 2 列 / lg 3〜4 列）も指示通り
 
 ## 微妙だった点
 
-- 色味（深緑の濃淡 / 暖色グレーの強度）は 1 回では決まらず、人間が確認
-- スキャフォールドの create-next-app が非空ディレクトリを拒否する仕様で、
-  「sibling dir で scaffold → 必要ファイルだけコピー」の迂回が必要だった
+- 色味（深緑の濃淡 / 暖色グレーの強度）は 1 回では決まらず、人間が dev サーバで目視確認
+- create-next-app が非空ディレクトリを拒否する仕様で、「sibling dir で scaffold → 必要ファイルだけコピー」の迂回が必要だった（このサイト固有の事情）
+- アクセシビリティ（aria-* / focus-visible）は Phase 1 では中程度。後の PR #15（skip-link）で補強
+- OG 画像はまだ未実装（next/og + 日本語 font が複雑）
 
-## 駆け出しへのアドバイス
+## Lessons Learned
 
-CLAUDE.md にカラー / フォント / 禁止事項を書いておくと、最初の 1 振りの精度が
-大きく上がる。逆に CLAUDE.md が薄いと、何度も振り直すことになる。
+1. **CLAUDE.md の質が出力の質を決める**: カラーコード、禁止事項、必須コンポーネントを書いておくと、最初の 1 振りで仕様に乗る
+2. **docs/03_pages.md のような「仕様書」を渡す価値は高い**: AI は要件を勝手に推測しないので、明文化された仕様があるとぶれない
+3. **大きなプロンプト（P6-1）でも、CLAUDE.md と組み合わせれば耐える**: 単独プロンプトの「文脈の薄さ」を補完できる
+4. **エッジケース（消えたアイコン）は AI が気付く**: `Github` → `ExternalLink` のような代替提案
+5. **色味だけは人間の目が必要**: `#2F5D3A` の彩度・明度の感覚は、コードでは伝えきれない
+6. **dev サーバを早めに立てる**: 文字色 / 背景色のコントラストはローカルで見ないと分からない
 
-## 関連
+## 自分の repo で試すには
 
-- [PR #8](https://github.com/Yoppy03work/field-guide-for-ai-dev/pull/8): home + /about
-- [Workflow Step 3](/workflow#step-3): Claude Code に実装を依頼する
-- [/tools/claude-code](/tools/claude-code)
+[/tutorials/github](/tutorials/github) で repo を作って、[/tutorials/vercel](/tutorials/vercel) で deploy したあと、以下の流れを真似てみてください：
+
+1. `CLAUDE.md` にプロジェクトのカラーパレット・フォント・禁止事項を書く
+2. `docs/spec.md` のような仕様書を 1 ページ作る
+3. Claude Code に「このページを spec.md の通りに実装して」と頼む
+4. dev サーバで色味を確認 → 微調整は人間が指示
+
+仕様書の精度がそのまま実装の精度になります。
+
+## 次に読むページ
+
+- [/tools/claude-code](/tools/claude-code) … Claude Code の使いどころ全般
+- [/tutorials/github](/tutorials/github) … 自分の repo を作るところから
+- [/workflow#step-3](/workflow#step-3) … Step 3: Claude Code に実装依頼
+- [/cases/case-2-codex-pr-review](/cases/case-2-codex-pr-review) … この PR の Codex レビュー編
+- [PR #8](https://github.com/Yoppy03work/field-guide-for-ai-dev/pull/8) … 実 PR の差分とコメント
