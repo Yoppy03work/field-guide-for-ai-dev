@@ -2,10 +2,17 @@
 
 > AIで作る、AIに任せる、AIで磨く。
 
+🌐 **本番**: <https://field-guide-for-ai-dev.vercel.app/>
+
 大学1年生〜駆け出しジュニアエンジニア向けの、**AI 開発フロー**を真似できる教材アプリ。
 
 主役は「AI ツール紹介」ではなく、**「AI を開発フローのどこに差し込むか」**。
 GitHub の基本から、Issue → PR → Review → Deploy までを 1 つの例で通します。
+
+## こだわりポイント
+
+主役はAIツール紹介でなく、開発フロー（Issue → Merge）のどこに差し込むかを駆け出し向けに解説したこと。
+専門用語には必ず **「ひとことで言うと」** を併記し、🟢🟡🔵 で情報源（実体験 / 一部 / 調査）を明示します。
 
 ## 対象読者
 
@@ -13,16 +20,19 @@ GitHub の基本から、Issue → PR → Review → Deploy までを 1 つの�
 - GitHub の Issue / Branch / PR / Merge をまだ使い慣れていない可能性
 - AI ツールは ChatGPT 程度しか触ったことがない人
 
-## サイト構成（MVP 6 ページ）
+## サイト構成（実装済み 16 ルート）
 
 | URL | 内容 |
 |---|---|
-| `/` | ホーム（「まずはここから」中心） |
-| `/learn/github` | GitHub 入門（最重要の入口、9 セクション） |
-| `/workflow` | 中心ページ（Issue→PR→Review→Deploy 8 ステップ） |
-| `/tools` | ツール一覧（7 本） |
-| `/cases` | 制作ログ（このサイト自体を作る過程の記録） |
-| `/about` | サイトの目的・著者 |
+| [`/`](https://field-guide-for-ai-dev.vercel.app/) | ホーム（「まずはここから」中心） |
+| [`/learn/github`](https://field-guide-for-ai-dev.vercel.app/learn/github) | GitHub 入門（9 セクション + ミニ課題） |
+| [`/workflow`](https://field-guide-for-ai-dev.vercel.app/workflow) | 中心ページ（Mermaid + 8 ステップ） |
+| [`/tools`](https://field-guide-for-ai-dev.vercel.app/tools) | ツール一覧（🟢 のみフィルタ付き） |
+| `/tools/[slug]` | 各ツール詳細（GitHub / Claude Code / Codex / Copilot / Antigravity / Vercel / 他 AI の 7 本、SSG） |
+| [`/cases`](https://field-guide-for-ai-dev.vercel.app/cases) | 制作ログ（4 本） |
+| `/cases/[slug]` | Case 1〜4 の詳細（SSG） |
+| [`/about`](https://field-guide-for-ai-dev.vercel.app/about) | サイトの目的・著者・ライセンス |
+| `/sitemap.xml` / `/robots.txt` | SEO 最小セット |
 
 ## ソース・バッジ
 

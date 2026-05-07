@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
+import { StatusBadge } from "@/components/StatusBadge";
 
 export const metadata: Metadata = {
   title: "About | AI Dev Field Guide",
@@ -14,7 +15,8 @@ export default function AboutPage() {
   return (
     <article className="mx-auto max-w-[720px] px-4 py-10 md:px-6 md:py-16">
       <header className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-[#1F2937] md:text-4xl">
+        <StatusBadge status="green" />
+        <h1 className="mt-4 text-3xl font-bold tracking-tight text-[#1F2937] md:text-4xl">
           About
         </h1>
         <p className="mt-3 text-base leading-relaxed text-[#4B5563]">
