@@ -7,40 +7,71 @@ icon: "Sparkles"
 order: 7
 ---
 
-## このツールをひとことで言うと
+import { Callout } from "@/components/Callout";
+
+## ひとことで言うと
 
 **文章校正・要約・補助的な相談に使える AI**。
 Gemini / ChatGPT / Claude（Web 版）などをまとめてここで扱います。
 
-> 🔵 **調査ベース**：著者は本サイト制作では未使用です。
-> 公式ドキュメントの整理に基づく内容のため、過剰な一般化を避けます。
+<Callout type="warn" title="🔵 調査ベース">
+  著者は本サイト制作では未使用です。公式ドキュメントの整理に基づく内容のため、過剰な一般化を避けます。
+</Callout>
+
+## まずやること
+
+軽い相談から試すのが楽：
+
+1. [Google AI Studio（Gemini 無料）](https://aistudio.google.com/) でログイン
+2. 「Issue を立てたい。機能は『〇〇』。タイトルと受け入れ基準を提案して」
+3. 出てきた下書きを GitHub に貼る
+
+これなら「相談 → コピペ」の単純な使い方で価値が出ます。
 
 ## 開発フローのどこで使うか
 
 - [Step 1: Issue を立てる](/workflow#step-1)（Issue 起票時の壁打ち）
+- [Step 4: PR を作る](/workflow#step-4)（description の下書き）
 - Cases 執筆時の文章校正
 - 公式ドキュメントの要約
 
+## 主要 3 つの違い（公式ドキュメントベース）
+
+| AI | 強み | 価格 |
+|---|---|---|
+| **Gemini** | Google サービスとの統合、長文脈、無料枠が広い | 無料あり |
+| **ChatGPT** | エコシステムの広さ、Custom GPTs | 無料あり / Plus $20/月 |
+| **Claude（Web 版）** | 長文の文章生成、構造化された出力 | 無料あり / Pro $20/月 |
+
+役割は重複するが、文体や得意分野が微妙に違う。1 つに絞るより、用途で使い分けるのが現実的。
+
 ## 実際に試したこと
 
-- なし（このサイトでは未使用）
+- なし（このサイトでは未使用、🔵）
 - 公式ドキュメントの整理のみ
 
 ## 効果があったこと
 
 - （未検証）公式ドキュメントの記載に依存
 
-## 微妙だったこと
+## よくある失敗
 
-- 著者は未使用なので「書ける範囲」が限定的
-- 機能差異・モデル更新が早く、スナップショット情報になりやすい
+- どれか 1 つに固執して、用途と AI の相性を考えない
+- 機密情報・API キーを貼ってしまう（プライバシー / 規約に注意）
+- Web 版 AI の出力を、コードの正解として鵜呑みにする
+- バージョン情報がないアウトプットを「最新」と誤認する
 
 ## 駆け出しが最初に試すなら
 
 - Google AI Studio で Gemini の無料お試し
 - ChatGPT の無料プランで「Issue 草案を一緒に書いて」と相談する
+- Claude（Web）で「この PR description を 3 行に要約して」と頼む
 
-## 関連
+複数の AI を 1 つの作業で比較すると、文体の違いが見えて使い分けの判断が早くなります。
 
-- 公式：[Google AI Studio](https://aistudio.google.com/) / [ChatGPT](https://chat.openai.com/)
-- Case：なし（試したら追記予定）
+## 次に読むページ
+
+- 公式：[Google AI Studio](https://aistudio.google.com/) / [ChatGPT](https://chat.openai.com/) / [Claude](https://claude.ai/)
+- [/tools/claude-code](/tools/claude-code) … ターミナル版（実装役）
+- [/tools/codex](/tools/codex) … PR レビュー専門
+- [/workflow](/workflow) … 8 ステップの中での補助的な役割
