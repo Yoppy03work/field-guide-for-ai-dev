@@ -37,7 +37,8 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  if (!(slug in CASE_COMPONENTS)) return { title: "Case が見つかりません" };
+  if (!Object.hasOwn(CASE_COMPONENTS, slug))
+    return { title: "Case が見つかりません" };
   const { frontmatter } = await getContentBySlug("cases", slug);
   return {
     title: `${frontmatter.title} | AI Dev Field Guide`,
@@ -53,7 +54,7 @@ export default async function CaseDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  if (!(slug in CASE_COMPONENTS)) notFound();
+  if (!Object.hasOwn(CASE_COMPONENTS, slug)) notFound();
   const typedSlug = slug as CaseSlug;
   const Component = CASE_COMPONENTS[typedSlug];
   const { frontmatter } = await getContentBySlug("cases", typedSlug);
