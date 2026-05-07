@@ -6,53 +6,106 @@ date: "2026-05-06"
 tools: ["vercel", "github"]
 ---
 
+import { Callout } from "@/components/Callout";
+
+<Callout type="warn" title="🟡 体験範囲">
+  このサイト（field-guide-for-ai-dev）と過去の web3-portfolio の 2 件
+  運用ベース。Edge / Serverless 機能、商用運用、大規模負荷は未経験です。
+  カスタムドメインも本サイトでは未設定。
+</Callout>
+
 ## やりたかったこと
 
 GitHub の `field-guide-for-ai-dev` リポジトリを Vercel に連携し、
 main の更新で本番、PR ごとに Preview URL が発行される運用を回したかった。
 
-> 🟡 **一部実体験**：このサイト + 過去の web3-portfolio の 2 件運用ベース。
-> 大規模運用や Edge / Serverless 機能までは未経験です。
+**仮説**: PR レビューでいちいち「ローカルで動かして確認」すると時間がかかる。
+Preview URL でレビュアーが即見られる状態にしたい。
 
 ## 使った AI / ツール
 
-- Vercel（Hobby プラン）
-- GitHub（リポジトリ）
+- **Vercel**（Hobby プラン、無料）
+- **GitHub**（リポジトリ連携）
 
-## 実際に投げた指示
+## 実際にやったこと
 
-実コマンドはほぼゼロ。Vercel Web UI に GitHub アカウントを連携し、
-リポジトリを選択 → Framework Preset で Next.js が自動検出されるので
-そのまま **Deploy**。
+実コマンドはほぼゼロ。手順は以下：
+
+1. [https://vercel.com/new](https://vercel.com/new) を開く
+2. GitHub OAuth で連携
+3. リストから `field-guide-for-ai-dev` を選んで `Import`
+4. Framework Preset で **Next.js が自動検出**
+5. Configure Project はそのまま `Deploy`
+6. 1〜2 分待つ → 本番 URL `field-guide-for-ai-dev.vercel.app` が発行
+
+これだけ。
+
+<Callout type="tip" title="設定はほぼゼロ">
+  `next.config.ts` が標準なら、Framework Preset で完結します。
+  pnpm の検出も自動。Vercel が「このプロジェクトは Next.js + pnpm」を
+  ロックファイルから判定してくれる。
+</Callout>
 
 ## 返ってきた結果
 
-- 約 1〜2 分で本番 URL（`field-guide-for-ai-dev.vercel.app`）が発行
+- 約 1〜2 分で本番 URL が発行
 - main にマージするたびに自動でデプロイ → URL は固定のまま中身が更新
-- PR を出すたびに Preview URL が PR コメントに自動投稿
+- PR を出すたびに **Preview URL が PR コメントに自動投稿**
+- 各 commit ごとに `<repo>-<sha>.vercel.app` の URL も発行（commit 別比較に便利）
+- Build Logs はダッシュボードからストリーミング表示
+
+### 実例：PR ごとの Preview URL
+
+PR #18（UX core 5 components）の例：
+
+```text
+Vercel ✅ pass
+Deployment has completed
+Preview: https://field-guide-for-ai-dev-git-feat-18-...vercel.app
+```
+
+PR コメントから 1 クリックで実機確認できる。
 
 ## 良かった点
 
-- 設定がほぼゼロ。`next.config.ts` が標準なら、Framework Preset で完結
+- 設定がほぼゼロ（Framework Preset で Next.js / pnpm を自動検出）
 - Preview URL の自動投稿が、レビュー時の「実機確認」コストをほぼゼロに
-- 本番 URL が固定なので、提出物の URL を 1 本決めれば後から変わらない
+- 本番 URL が固定なので、**授業課題の提出物 URL を 1 本決めれば後から変わらない**
+- main マージ時の自動デプロイで「マージしたら 30 秒で本番」のリズムが作れる
+- Build ログがダッシュボードに揃うので、CI/CD が初心者にも見える
+- 無料枠（Hobby）でこのサイトの全機能が回る
 
 ## 微妙だった点
 
-- `pnpm-workspace.yaml` の `packages` field 欠落のような設定ミスは
-  ビルドログから読まないとわからない（事前に CI で同等を回しておくと安全）
-- 環境変数を Production / Preview で分けないと、Preview で本番 DB を
-  叩く事故が起きうる（このサイトは AI API 不使用のため該当なし）
-- 古いビルドの Vercel CDN キャッシュが残ることが稀にある（少し待つと解消）
+- `pnpm-workspace.yaml` の `packages` field 欠落のような設定ミスはビルドログから読まないとわからない（事前に CI で同等を回しておくと安全）
+- 環境変数を Production / Preview で分けないと、Preview で本番 DB を叩く事故が起きうる（このサイトは AI API 不使用のため該当なし）
+- 古いビルドの Vercel CDN キャッシュが稀に残る（数十秒待つと解消）
+- 商用利用は Hobby 不可 → Pro プランが必要
+- Preview URL は PR が Open の間「最新」、PR が Close されると古い表示で残る
 
-## 駆け出しへのアドバイス
+## Lessons Learned
 
-最初は GitHub repo を作って Vercel に Import するだけで十分。
-カスタムドメインや環境変数は後から追加できる。Preview URL を
-「PR レビューの標準フロー」として組み込むと、レビュー体験が変わる。
+1. **設定はほぼ要らない**: Next.js の標準構成なら Framework Preset で 99% 完結
+2. **CI と Vercel ビルドを揃える**: ローカル → CI → Vercel の 3 段で同じ pnpm install / build を回す
+3. **Preview URL を PR レビューの標準動線に**: 「コードを読む前にまず開く」習慣を作る
+4. **commit 別 URL で Before/After 比較**: 修正の効果が一目でわかる
+5. **環境変数は Production / Preview / Development で分ける**: 本番 API キーが Preview に漏れる事故を防ぐ
+6. **本番 URL は変えない**: カスタムドメイン化した後でも `*.vercel.app` は残るので、提出物 URL は固定
+7. **Build Logs を読む練習をする**: 失敗したログを読んで原因特定する力は、ローカルでも応用できる
 
-## 関連
+## 自分の repo で試すには
 
-- [Workflow Step 7](/workflow#step-7): Vercel Preview で確認
-- [Workflow Step 8](/workflow#step-8): Merge して公開
-- [/tools/vercel](/tools/vercel)
+1. [/tutorials/github](/tutorials/github) で repo を作る
+2. [/tutorials/vercel](/tutorials/vercel) で 25 分のハンズオン（連携 → Preview → Production → ビルドエラー読解）
+3. PR を 1 つ出して、PR コメントに自動投稿される Preview URL を開いてみる
+4. ローカルとの違い（フォント / 色 / レスポンシブ）をチェック
+
+最初は無料の Hobby プランで十分。提出物の URL がそのまま教材として使えます。
+
+## 次に読むページ
+
+- [/tools/vercel](/tools/vercel) … Vercel の使いどころ
+- [/tutorials/vercel](/tutorials/vercel) … 25 分のハンズオン
+- [/workflow#step-7](/workflow#step-7) … Step 7: Vercel Preview
+- [/workflow#step-8](/workflow#step-8) … Step 8: Merge → 本番自動デプロイ
+- [/cases/case-2-codex-pr-review](/cases/case-2-codex-pr-review) … この CI と組み合わせた運用
