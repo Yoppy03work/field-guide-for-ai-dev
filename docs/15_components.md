@@ -7,6 +7,11 @@
 
 - [StatusBadge](#statusbadge) … 情報源バッジ
 - [Glossary](#glossary) … 「ひとことで言うと」ブロック
+- [Callout](#callout) … info / warn / tip 注記ブロック
+- [RelatedPages](#relatedpages) … 「次に読むページ」リンクリスト
+- [Breadcrumb](#breadcrumb) … パンくずリスト
+- [CodeBlock](#codeblock) … コピーボタン付きコードブロック（自動適用）
+- [ReadingTime](#readingtime) … 読了時間表示
 - [Mermaid](#mermaid) … クライアント描画の図
 - [Toc](#toc) … 目次（page.tsx で使う、MDX では使わない）
 - [StepCard / MiniTask](#stepcard--minitask) … チュートリアル課題
@@ -65,6 +70,142 @@ type GlossaryProps = {
 - 同じ用語に対して **同一ページで 2 個以上**置かない
 - 別ページでは初出として置く（例：`/learn/github` と `/tutorials/github` の両方で OK）
 - 中身（oneLine）を「`docs/04_content.md` の要点」と矛盾させない
+
+## Callout
+
+info / warn / tip の 3 種類の注記ブロック。Glossary（用語ひとこと）とは別物。
+
+```mdx
+import { Callout } from "@/components/Callout";
+
+<Callout type="info" title="任意のタイトル">
+  本文。中身は ReactNode を受け取る。
+</Callout>
+
+<Callout type="warn">
+  「よくある失敗」ブロックで使うと効きます。
+</Callout>
+
+<Callout type="tip">
+  ヒントや補足。
+</Callout>
+```
+
+**型**:
+
+```ts
+type CalloutType = "info" | "warn" | "tip";
+type CalloutProps = {
+  type?: CalloutType;       // default: "info"
+  title?: string;
+  children: ReactNode;
+};
+```
+
+**禁則**:
+- 1 ページに 5 個以上置かない（情報過多）
+- `type="warn"` は本物の注意点に限定（誇張しない）
+
+## RelatedPages
+
+「次に読むページ」共通コンポーネント。詳細・教材ページの末尾に置く。
+
+```mdx
+import { RelatedPages } from "@/components/RelatedPages";
+
+<RelatedPages items={[
+  { href: "/tutorials/github", label: "GitHub チュートリアル", description: "実際に手を動かす" },
+  { href: "/tools/github", label: "/tools/github", description: "開発フローの中での使い方" },
+]} />
+```
+
+**型**:
+
+```ts
+type RelatedPageItem = {
+  href: string;
+  label: string;
+  description?: string;
+};
+type RelatedPagesProps = {
+  items: readonly RelatedPageItem[];
+  heading?: string;  // default: "次に読むページ"
+};
+```
+
+## Breadcrumb
+
+パンくずリスト。`page.tsx` の上部で使う。
+
+```tsx
+import { Breadcrumb } from "@/components/Breadcrumb";
+
+<Breadcrumb items={[
+  { href: "/", label: "ホーム" },
+  { href: "/tools", label: "ツール" },
+  { label: "GitHub" },  // 最後は href なし（現在地）
+]} />
+```
+
+**型**:
+
+```ts
+type BreadcrumbItem = {
+  href?: string;
+  label: string;
+};
+```
+
+## CodeBlock
+
+コピーボタン付きコードブロック。MDX では **`mdx-components.tsx` で `pre` を自動置換**しているので、
+コードブロックを書くと自動的に `<CodeBlock>` でラップされる。
+
+```mdx
+\`\`\`bash
+pnpm install
+\`\`\`
+```
+
+明示的に使いたい場合：
+
+```tsx
+import { CodeBlock } from "@/components/CodeBlock";
+
+<CodeBlock>
+  <code>pnpm install</code>
+</CodeBlock>
+```
+
+**禁則**:
+- インライン code は対象外（`<code>` のまま）
+- 動的に変わる内容（タイムスタンプ等）は CodeBlock に入れない
+
+## ReadingTime
+
+読了時間表示（日本語 600 字/分の素直な近似）。
+
+```tsx
+import { ReadingTime } from "@/components/ReadingTime";
+
+// 自動算出
+<ReadingTime text={mdxRawText} />
+
+// 手動指定
+<ReadingTime minutes={5} />
+```
+
+**型**:
+
+```ts
+type ReadingTimeProps = {
+  text?: string;       // 指定時は minutes より優先される自動算出
+  minutes?: number;    // 手動上書き
+  className?: string;
+};
+```
+
+算出ロジックは `src/lib/reading-time.ts` の `estimateReadingMinutes` を使う。
 
 ## Mermaid
 
