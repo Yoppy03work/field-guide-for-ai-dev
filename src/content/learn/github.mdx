@@ -5,7 +5,14 @@ status: green
 ---
 
 import { Glossary } from "@/components/Glossary";
+import { Callout } from "@/components/Callout";
 import { MiniTask } from "@/components/MiniTask";
+
+<Callout type="info" title="このページの読み方">
+  GitHub の用語を 9 セクションで「ひとことで言うと」から押さえます。
+  操作したくなったら、各セクションの最後の **「試してみよう」** か、
+  ページ最後の [/tutorials/github](/tutorials/github) に進んでください。
+</Callout>
 
 <section id="section-1" className="scroll-mt-24">
 
@@ -26,6 +33,12 @@ GitHub.com にプロジェクトを置くと、世界中からアクセス・コ
 **試してみよう**
 
 - GitHub アカウントを作って、自分用リポジトリを1つ作る
+
+<Callout type="tip" title="もう一歩深く">
+  GitHub は「Git」というバージョン管理の仕組みに、Web のチーム開発機能
+  （Issue / PR / レビュー）を乗せたサービスです。Git と GitHub は別物。
+  ローカルだけでも Git は使えます（ただし共有しにくい）。
+</Callout>
 
 </section>
 
@@ -50,6 +63,17 @@ GitHub.com にプロジェクトを置くと、世界中からアクセス・コ
 
 - 空のリポジトリを作って `README.md` を1行書く
 
+<Callout type="warn" title="よくある失敗">
+  Private を選んだのに「コラボに招待できない」と困る → Settings →
+  Collaborators で個別招待が必要。Public ならその手間なし。
+  授業課題や教材としての公開なら Public が素直。
+</Callout>
+
+<Callout type="tip" title="もう一歩深く">
+  GitHub の URL は `github.com/<user>/<repo>` の形。SNS で共有するときも
+  この URL がそのまま動きます。`<user>` 部分は organization 名でも OK。
+</Callout>
+
 </section>
 
 <section id="section-3" className="scroll-mt-24">
@@ -73,6 +97,18 @@ GitHub.com にプロジェクトを置くと、世界中からアクセス・コ
 
 - 自分のリポジトリで Issue を1つ立てる
 
+<Callout type="tip" title="もう一歩深く">
+  Issue タイトルは `[feat]` `[bug]` `[content]` などのプレフィックスを
+  付けると検索しやすい。本文には **受け入れ基準**（`- [ ]` のチェック
+  リスト）を書くと「完了」の判断がぶれない。
+</Callout>
+
+<Callout type="warn" title="よくある失敗">
+  「直す」「修正」のように曖昧なタイトルにしてしまう → 具体例：
+  「ログインボタンが iPhone で押せない」のように、何が / どこで /
+  何が起きるか の 3 点を入れると質が上がる。
+</Callout>
+
 </section>
 
 <section id="section-4" className="scroll-mt-24">
@@ -94,6 +130,18 @@ GitHub.com にプロジェクトを置くと、世界中からアクセス・コ
 **試してみよう**
 
 - `git switch -c feature/test` で新しいブランチを作る
+
+<Callout type="tip" title="もう一歩深く">
+  ブランチ名は `<種類>/<issue#>-<短い説明>` がおすすめ：
+  `feat/12-login-form` / `fix/34-mobile-overflow` / `docs/45-readme`。
+  種類で検索できて、issue 番号で履歴を辿れます。
+</Callout>
+
+<Callout type="warn" title="よくある失敗">
+  main で直接作業してしまう → main は常に動く状態を保ちたい場所。
+  GitHub UI から作業するときも、編集前に必ずブランチを切る。
+  「Edit this file」→ 下の「Create a new branch」を選べば自動で分岐。
+</Callout>
 
 </section>
 
@@ -121,6 +169,17 @@ GitHub.com にプロジェクトを置くと、世界中からアクセス・コ
 
 - 軽微な変更で PR を1つ出してみる
 
+<Callout type="tip" title="もう一歩深く">
+  PR Description に `Closes #N` と書くと、マージ時にその Issue が自動で
+  Close される。手動 Close を忘れない仕組み。`Fixes #N` `Resolves #N`
+  でも同じ動きをします。
+</Callout>
+
+<Callout type="warn" title="よくある失敗">
+  Description が空 → 「何をしたか」「なぜしたか」「動作確認」の 3 行で
+  十分。レビュー速度がぐっと上がります。
+</Callout>
+
 </section>
 
 <section id="section-6" className="scroll-mt-24">
@@ -143,6 +202,18 @@ GitHub.com にプロジェクトを置くと、世界中からアクセス・コ
 **試してみよう**
 
 - 他人の PR にコメントを付けてみる
+
+<Callout type="tip" title="もう一歩深く">
+  Codex や CodeRabbit のような **AI レビュアー**を入れると、人間レビュー
+  前に型エラーや命名のブレを潰せます。本サイトでも Codex を使っており、
+  詳細は [/tools/codex](/tools/codex) と [/cases/case-2-codex-pr-review](/cases/case-2-codex-pr-review) に。
+</Callout>
+
+<Callout type="warn" title="よくある失敗">
+  「Approve」だけして本文を読まない → AI レビュアーがいても、最終判断は
+  人間が責任を持つ前提で読む。AI レビューは「フィルタ」、人間レビューは
+  「設計判断」と役割分担。
+</Callout>
 
 </section>
 
@@ -170,6 +241,15 @@ GitHub.com にプロジェクトを置くと、世界中からアクセス・コ
 
 - 自分の PR をマージしてみる
 
+<Callout type="tip" title="もう一歩深く">
+  マージには 3 種類あります：
+  - **Merge commit**: 履歴をそのまま残す（本サイトでもこれを使っている）
+  - **Squash and merge**: PR の全コミットを 1 つにまとめる（履歴がきれいに）
+  - **Rebase and merge**: 線形履歴になる（読みやすいが破壊的）
+
+  チーム合意で 1 つに揃えるのが普通。
+</Callout>
+
 </section>
 
 <section id="section-8" className="scroll-mt-24">
@@ -195,6 +275,19 @@ PR ごとに `*.vercel.app` の URL が自動で発行される。
 **試してみよう**
 
 - 自分の PR でプレビュー URL を開いてみる
+
+<Callout type="tip" title="もう一歩深く">
+  Preview URL は **commit ごと**に発行されるので、過去の状態にいつでも
+  戻れる。`<repo>-<hash>.vercel.app` の hash を変えれば、
+  「修正前」と「修正後」を URL で比較できます。手を動かす実演は
+  [/tutorials/vercel](/tutorials/vercel) で。
+</Callout>
+
+<Callout type="warn" title="よくある失敗">
+  環境変数を Production と Preview で分けないと、Preview から本番 DB を
+  叩く事故が起きうる。Vercel の Settings → Environment Variables で
+  Production / Preview / Development を分けるのが基本。
+</Callout>
 
 </section>
 
@@ -223,6 +316,23 @@ PR ごとに `*.vercel.app` の URL が自動で発行される。
 
 - [/workflow](/workflow) で 8 ステップの AI 差し込みポイントを見る
 
+<Callout type="tip" title="もう一歩深く">
+  AI 任せにしないコツは「プロンプトを再現可能に残す」こと。本サイトでは
+  PR テンプレに「Claude Code への指示」「Codex への指示」欄を用意して、
+  毎回どんな指示を出したかが PR から読めるようにしています。
+  実例は [/cases](/cases) に。
+</Callout>
+
 </section>
+
+## 概念は分かった、次は手を動かす
+
+ここまでで GitHub の主要な用語と役割が頭に入ったはずです。
+次は実際にブラウザで操作して、Issue → Branch → PR → Merge を 1 周してみましょう。
+
+- [/tutorials/github](/tutorials/github) で 35 分のハンズオン
+- [/workflow](/workflow) で AI を差し込む 8 ステップを通読
+- [/tools/github](/tools/github) で開発フローでの GitHub の使い分けを整理
+- [/cases/case-1-claude-code-ui](/cases/case-1-claude-code-ui) で「実際に Claude Code に UI を任せた」記録
 
 <MiniTask />
