@@ -95,7 +95,8 @@ src/
 1. ひとことで言うと   … <Glossary> または冒頭1行
 2. まずやること        … 5 分で試せるアクション
 3. よくある失敗        … ハマりどころ 3〜5 個
-4. 次に読むページ      … <RelatedPages> で 1〜3 件
+4. 次に読むページ      … Markdown リンクリスト 1〜3 件
+                        （Phase 2 で <RelatedPages> に置換予定）
 ```
 
 Home / About / 一覧ページ（`/` `/about` `/tools` `/cases` `/tutorials`）では、

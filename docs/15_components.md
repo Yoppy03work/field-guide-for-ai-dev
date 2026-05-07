@@ -118,8 +118,8 @@ import { MiniTask } from "@/components/MiniTask";
 |---|---|
 | 1. ひとことで言うと | `<Glossary>` |
 | 2. まずやること | プレーン Markdown の番号付きリスト |
-| 3. よくある失敗 | `<Callout type="warn">` （Phase 2 で追加） |
-| 4. 次に読むページ | `<RelatedPages>` （Phase 2 で追加） |
+| 3. よくある失敗 | プレーン Markdown の箇条書き（Phase 2 で `<Callout type="warn">` に置換予定） |
+| 4. 次に読むページ | プレーン Markdown のリンクリスト（Phase 2 で `<RelatedPages>` に置換予定） |
 
 ## このファイルの更新ルール
 

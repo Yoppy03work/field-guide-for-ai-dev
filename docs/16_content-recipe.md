@@ -25,10 +25,10 @@
 
 ## 次に読むページ
 
-<RelatedPages items={[
-  { href: "...", label: "..." },
-  { href: "...", label: "..." },
-]} />
+<!-- Phase 2 で <RelatedPages> コンポーネントを追加予定。それまではプレーン Markdown のリンクリストで書く。 -->
+
+- [ラベル](/path)
+- [ラベル](/path)
 ```
 
 ## ページタイプ別テンプレ
