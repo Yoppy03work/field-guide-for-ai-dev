@@ -2,16 +2,20 @@ import { Clock } from "lucide-react";
 import { estimateReadingMinutes } from "@/lib/reading-time";
 
 type ReadingTimeProps = {
-  /** 本文文字列。指定があれば minutes を上書きして自動算出する。 */
+  /** 本文文字列。基本はこれを渡して自動算出する。 */
   text?: string;
-  /** frontmatter で手動指定したいときに使う */
+  /** 手動上書き。text と両方渡された場合はこちらが優先される。 */
   minutes?: number;
   className?: string;
 };
 
 export function ReadingTime({ text, minutes, className }: ReadingTimeProps) {
   const value =
-    minutes ?? (text !== undefined ? estimateReadingMinutes(text) : undefined);
+    minutes !== undefined
+      ? minutes
+      : text !== undefined
+        ? estimateReadingMinutes(text)
+        : undefined;
   if (value === undefined) return null;
   return (
     <span

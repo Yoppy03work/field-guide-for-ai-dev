@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, type HTMLAttributes, type ReactElement } from "react";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, X } from "lucide-react";
 
 type CodeBlockProps = HTMLAttributes<HTMLPreElement>;
+
+type CopyState = "idle" | "copied" | "failed";
 
 function extractText(node: unknown): string {
   if (node === null || node === undefined || typeof node === "boolean") {
@@ -25,19 +27,32 @@ function extractText(node: unknown): string {
 }
 
 export function CodeBlock({ children, className, ...rest }: CodeBlockProps) {
-  const [copied, setCopied] = useState(false);
+  const [state, setState] = useState<CopyState>("idle");
   const text = extractText(children);
 
   const handleCopy = async (): Promise<void> => {
-    if (typeof navigator === "undefined" || !navigator.clipboard) return;
+    if (typeof navigator === "undefined" || !navigator.clipboard) {
+      setState("failed");
+      window.setTimeout(() => setState("idle"), 2000);
+      return;
+    }
     try {
       await navigator.clipboard.writeText(text);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1500);
-    } catch {
-      // クリップボード未許可などは黙って無視
+      setState("copied");
+      window.setTimeout(() => setState("idle"), 1500);
+    } catch (error) {
+      console.error("CodeBlock: clipboard write failed", error);
+      setState("failed");
+      window.setTimeout(() => setState("idle"), 2500);
     }
   };
+
+  const buttonAriaLabel =
+    state === "copied"
+      ? "コピー済み"
+      : state === "failed"
+        ? "コピーに失敗"
+        : "コードをコピー";
 
   return (
     <div className="group relative my-4">
@@ -51,16 +66,25 @@ export function CodeBlock({ children, className, ...rest }: CodeBlockProps) {
         <button
           type="button"
           onClick={handleCopy}
-          aria-label={copied ? "コピー済み" : "コードをコピー"}
+          aria-label={buttonAriaLabel}
+          aria-live="polite"
           className="absolute right-2 top-2 inline-flex items-center gap-1 rounded border border-[#E5E7EB] bg-white px-2 py-1 text-xs text-[#4B5563] opacity-0 transition-opacity hover:bg-[#F3F0EA] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F5D3A] group-hover:opacity-100 focus-visible:opacity-100"
         >
-          {copied ? (
+          {state === "copied" ? (
             <>
               <Check
                 className="h-3.5 w-3.5 text-[#1B5E20]"
                 aria-hidden="true"
               />
               コピー済み
+            </>
+          ) : state === "failed" ? (
+            <>
+              <X
+                className="h-3.5 w-3.5 text-[#7A4F01]"
+                aria-hidden="true"
+              />
+              コピー失敗
             </>
           ) : (
             <>
