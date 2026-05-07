@@ -7,19 +7,30 @@ icon: "Bot"
 order: 2
 ---
 
-## このツールをひとことで言うと
+import { Callout } from "@/components/Callout";
+
+## ひとことで言うと
 
 **ターミナルで対話しながらコードを書ける AI**。
 リポジトリの中で動き、ファイルの読み書き / コマンド実行 / Git 操作までセットでこなす。
 
-## 開発フローのどこで使うか
+## まずやること
 
-- [Step 3: Claude Code に実装を依頼する](/workflow#step-3)（実装担当）
-- 補助的に Step 1（Issue 草案）、Step 4（PR description）、Step 8（Cases 執筆）にも使える
+```bash
+# Claude Code を起動して、リポジトリの構造を聞く
+claude
+> このプロジェクトを 5 行で説明して
 
-## CLAUDE.md の書き方（このページ独自）
+# 次に小さい依頼で粒度をつかむ
+> README に1行追加して
+```
+
+これで「自分の repo を理解させる → 小さい変更を頼む」の感覚がつかめます。
+
+## CLAUDE.md の書き方（Claude Code に効くコツ）
 
 プロジェクトルートに `CLAUDE.md` を置くと、Claude Code はそれをコンテキストとして読みます。
+
 **必ず書きたいこと**：
 
 - このプロジェクトは何か（1〜3 行）
@@ -27,30 +38,48 @@ order: 2
 - 専門用語のルール（「ひとことで言うと」付与など）
 - 危険操作のルール（削除・破壊的変更の前は確認）
 
-このリポジトリの [CLAUDE.md](https://github.com/Yoppy03work/field-guide-for-ai-dev/blob/main/CLAUDE.md) も
-そのまま参考にできます。
+このリポジトリの [CLAUDE.md](https://github.com/Yoppy03work/field-guide-for-ai-dev/blob/main/CLAUDE.md) もそのまま参考にできます。
+
+<Callout type="tip" title="CLAUDE.md の質 = 出力の質">
+  カラーコード、禁止事項、必須コンポーネントを書いておくと、最初の 1 振りで仕様に乗ります。逆に CLAUDE.md が薄いと、何度も振り直すことに。
+</Callout>
+
+## 開発フローのどこで使うか
+
+- [Step 3: Claude Code に実装を依頼する](/workflow#step-3)（実装担当）
+- 補助的に Step 1（Issue 草案）、Step 4（PR description）、Step 8（Cases 執筆）にも使える
 
 ## 実際に試したこと
 
-- このサイトの実装全工程（Next.js 16 init / コンポーネント / MDX / ページ実装）
+- このサイトの実装全工程（Next.js 16 init / 30+ コンポーネント / MDX / 24+ PR）
 - 過去リポジトリの調査・読解（「このコードは何をしてる？」を聞く使い方）
+- ドキュメント作成（CONTRIBUTING.md / 16_content-recipe.md など）
 
 ## 効果があったこと
 
 - CLAUDE.md を整備すると数時間分の作業を任せられる
 - ファイル横断のリファクタや、新規ページの雛形作成が速い
+- Codex の指摘を取り込む修正サイクルが半自動になる
+- ドキュメントとコードを並行して整える pull がきく
 
-## 微妙だったこと
+## よくある失敗
 
 - 大きい変更は粒度を分けないとブレる（1 PR で全部やらせると迷走）
 - 破壊的操作（rm / git reset）の前に確認を求める運用を徹底しないと事故る
+- 「いい感じに作って」だけの指示は AI が広く解釈して、想定外のファイルに触れる
+- CLAUDE.md がない / 薄い repo では、毎回プロンプトで方針を補う羽目に
+- AI 出力をそのまま commit する → 必ず差分を読んで判断する
 
 ## 駆け出しが最初に試すなら
 
 - 自分のリポジトリで `claude` を起動して「このプロジェクトを説明して」と聞いてみる
 - 次に「README を1行追加して」など小さい依頼で粒度感をつかむ
+- 慣れたら CLAUDE.md にカラーパレット / 禁止事項を書いて再依頼
 
-## 関連
+## 次に読むページ
 
-- Case 1: Claude Code に UI 実装を任せた（執筆予定）
-- [/learn/github](/learn/github) Section 9: AI 開発の差し込みポイント
+- [/cases/case-1-claude-code-ui](/cases/case-1-claude-code-ui) … 著者の実 PR で Claude Code に UI 実装を任せた記録
+- [/learn/github](/learn/github) Section 9 … AI 開発の差し込みポイント
+- [/tools/copilot](/tools/copilot) … エディタ補完との使い分け
+- [/workflow#step-3](/workflow#step-3) … 8 ステップの中での位置づけ
+- [CLAUDE.md（このリポジトリ）](https://github.com/Yoppy03work/field-guide-for-ai-dev/blob/main/CLAUDE.md) … 実例

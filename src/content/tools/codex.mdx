@@ -7,10 +7,28 @@ icon: "MessageSquare"
 order: 3
 ---
 
-## このツールをひとことで言うと
+import { Callout } from "@/components/Callout";
+
+## ひとことで言うと
 
 **PR 提出時に自動でレビューコメントを書いてくれる AI**。
 型エラー / 命名 / テスト漏れなどのチェックを、人間レビュー前にこなす。
+
+## まずやること
+
+1. repo に [Codex を連携](https://chatgpt.com/codex/cloud/settings/general)
+2. PR テンプレに「Codex への指示」欄を入れる
+3. PR を 1 つ出して、Codex のコメントを観察する
+
+```markdown
+## Codex への指示
+
+このPRをレビューしてほしい観点:
+
+- [ ] TypeScript strict 違反が無いか
+- [ ] @apply / インラインスタイル混入が無いか
+- [ ] アクセシビリティ要件（alt / aria-* / focus）を満たすか
+```
 
 ## 開発フローのどこで使うか
 
@@ -19,25 +37,39 @@ order: 3
 
 ## 実際に試したこと
 
-- PR で型エラー検出、命名提案、テスト追加提案
-- このリポジトリの PR テンプレに「TypeScript strict 違反」「@apply 混入」などの観点を明記して運用
+- このサイトの 22+ PR で Codex の自動レビューを実運用
+- PR #9 で **P1 critical**（`Object.hasOwn` 必須）を 1 件発見、PR #16 で対応
+- PR #18 で **P2 yellow** ×4 を同 PR 内で対応（clipboard 失敗 / regex / docstring / touch UI）
+- AGENTS.md にレビュー観点を P1/P2/P3 で細分化して指示
 
 ## 効果があったこと
 
-- 人間レビュー前のフィルタとして優秀
-- 機械的な「@apply 入っちゃった」「any が混じった」などをすぐ見つけてくれる
+- 人間レビュー前のフィルタとして優秀（型 / lint / 命名）
+- `Object.hasOwn` のような「気付きにくいセキュリティ系」を拾ってくれた
+- 「@apply 入っちゃった」「any 混入」のような機械的事故は一発で潰せる
+- 重要度（P1/P2/P3）ラベルで対応の優先度がぶれない
 
-## 微妙だったこと
+## よくある失敗
 
-- 的外れ指摘もある（「全部対応しなくていい」と割り切る前提）
-- 設計レビュー（「このアーキでいいか」）は守備範囲外
+- 的外れ指摘もある（10〜20%）→ 全部対応しなくていい、判断は人間
+- 設計レビュー（このアーキでいいか）は Codex の守備範囲外
+- content-heavy な PR では応答しない / 遅いことがある（このサイトでも Phase 3 以降観測）
+- 「Approve だけして本文を読まない」と AI 任せの危険状態に
+- AI の指摘の深刻度を見極めずに全部潰そうとして、merge が遅れる
 
 ## 駆け出しが最初に試すなら
 
-- 自分のリポジトリで PR を1つ出して、Codex のコメントが来るのを待つ
-- 1 件だけ取り込んでみる（全部対応しなくていい）
+1. 自分のリポジトリで PR を 1 つ出す（小さい変更で OK）
+2. Codex のコメントが来るのを 5〜10 分待つ
+3. 1 件だけ取り込んでみる（全部対応しなくていい）
 
-## 関連
+<Callout type="tip" title="Codex 対応の運用">
+  PR description に「Codex 対応欄」を入れて、指摘ごとに「対応済み / 対応しない理由 / Issue 化」を明記すると、後から見返したときに教材になります。
+</Callout>
 
-- Case 2: Codex に PR レビューさせた（執筆予定）
-- [AGENTS.md](https://github.com/Yoppy03work/field-guide-for-ai-dev/blob/main/AGENTS.md) で Codex のレビュー観点を定義
+## 次に読むページ
+
+- [/cases/case-2-codex-pr-review](/cases/case-2-codex-pr-review) … 著者の Codex 運用ログ
+- [AGENTS.md（このリポジトリ）](https://github.com/Yoppy03work/field-guide-for-ai-dev/blob/main/AGENTS.md) … Codex のレビュー観点を定義
+- [/workflow#step-5](/workflow#step-5) … 8 ステップの中での位置づけ
+- [/tools/claude-code](/tools/claude-code) … 実装役と組み合わせた運用

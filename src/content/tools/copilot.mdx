@@ -7,37 +7,68 @@ icon: "Code"
 order: 4
 ---
 
-## このツールをひとことで言うと
+import { Callout } from "@/components/Callout";
+
+## ひとことで言うと
 
 **エディタ内で次の数行を補完してくれる AI**。
 Tab を押すと続きの実装が出てくる、いちばんカジュアルな AI 補助。
+
+## まずやること
+
+1. VS Code に Copilot 拡張をインストール
+2. GitHub アカウントでサインイン（学生は[無料プラン](https://education.github.com/)あり）
+3. 関数名だけ書いて Tab を押す → 候補が出る
+
+```ts
+// 関数名だけ書いて Tab
+function calculateReadingMinutes(text: string) {
+  // ↓ ここから先を Copilot が提案
+}
+```
 
 ## 開発フローのどこで使うか
 
 - [Step 3: Claude Code に実装を依頼する](/workflow#step-3) の補助（コーディング中の補完）
 - import 文の自動補完、テストパターン展開、JSDoc 生成など
 
+## Claude Code との使い分け
+
+| 用途 | 向き |
+|---|---|
+| 数行の補完、import 補完、テストパターン展開 | **Copilot**（流れを止めない） |
+| 複数ファイル横断、新規ページ実装、リファクタ | **Claude Code**（対話と判断が必要） |
+| 「いい感じに作って」レベルの粒度 | どちらも苦手（人間が分割する） |
+
 ## 実際に試したこと
 
-- import 文補完（型・パッケージ名の予測）
-- 似たパターンが続くテストコードの展開
-- 関数のドキュメントコメント自動生成
+- このサイトの実装中、Tailwind クラスや Lucide アイコン名の補完
+- import 文の自動補完（`import { ... } from "@/components/..."`）
+- テストパターンの展開（同じ shape の test を 3〜5 個並べるとき）
+- JSDoc / コメント文の生成
 
 ## 効果があったこと
 
 - 流れを止めない補完。考えごとを中断させない
 - Claude Code に「指示する」ほどではない作業に向く
+- 大きな実装は Claude Code、流れの中の補完は Copilot、の二刀流が回る
 
-## 微妙だったこと
+## よくある失敗
 
-- 古い API を提案することがある（要見直し）
-- 大きな塊の実装は Claude Code に任せたほうが結局速い
+- 古い API を提案することがある（要見直し、特に Next.js 16 系）
+- 大きな塊の実装は Copilot に任せると粒度がブレる（Claude Code に切り替える）
+- Copilot 提案を Tab で受け入れて、内容を読まない → 仕様外のコードが混じる
+- プライバシー設定を確認せずに business コードに使う（規約注意）
 
 ## 駆け出しが最初に試すなら
 
 - VS Code で Copilot 拡張を入れる
 - 関数名だけ書いて Tab を押す（補完候補が出る）
+- 提案を受け入れたら **必ず読む**（Tab 連打は禁物）
+- 大きな塊は [Claude Code](/tools/claude-code) に切り替える感覚を持つ
 
-## 関連
+## 次に読むページ
 
-- Case 1: Claude Code との併用（執筆予定）
+- [/tools/claude-code](/tools/claude-code) … 大きい依頼の時はこっち
+- [/cases/case-1-claude-code-ui](/cases/case-1-claude-code-ui) … 二刀流の実例
+- [/workflow#step-3](/workflow#step-3) … 8 ステップの中での位置づけ
