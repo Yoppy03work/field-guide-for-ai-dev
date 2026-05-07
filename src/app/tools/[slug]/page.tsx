@@ -55,7 +55,8 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  if (!(slug in TOOL_COMPONENTS)) return { title: "ツールが見つかりません" };
+  if (!Object.hasOwn(TOOL_COMPONENTS, slug))
+    return { title: "ツールが見つかりません" };
   const { frontmatter } = await getContentBySlug("tools", slug);
   return {
     title: `${frontmatter.title} | AI Dev Field Guide`,
@@ -69,7 +70,7 @@ export default async function ToolDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  if (!(slug in TOOL_COMPONENTS)) notFound();
+  if (!Object.hasOwn(TOOL_COMPONENTS, slug)) notFound();
   const typedSlug = slug as ToolSlug;
   const Component = TOOL_COMPONENTS[typedSlug];
   const { frontmatter } = await getContentBySlug("tools", typedSlug);
