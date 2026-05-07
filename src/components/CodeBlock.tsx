@@ -55,10 +55,10 @@ export function CodeBlock({ children, className, ...rest }: CodeBlockProps) {
         : "コードをコピー";
 
   return (
-    <div className="group relative my-4">
+    <div className="relative my-4">
       <pre
         {...rest}
-        className={`overflow-x-auto rounded-md border border-[#E5E7EB] bg-[#F3F0EA] p-4 text-sm leading-relaxed text-[#1F2937] ${className ?? ""}`}
+        className={`overflow-x-auto rounded-md border border-[#E5E7EB] bg-[#F3F0EA] p-4 pr-24 text-sm leading-relaxed text-[#1F2937] ${className ?? ""}`}
       >
         {children}
       </pre>
@@ -68,7 +68,7 @@ export function CodeBlock({ children, className, ...rest }: CodeBlockProps) {
           onClick={handleCopy}
           aria-label={buttonAriaLabel}
           aria-live="polite"
-          className="absolute right-2 top-2 inline-flex items-center gap-1 rounded border border-[#E5E7EB] bg-white px-2 py-1 text-xs text-[#4B5563] opacity-0 transition-opacity hover:bg-[#F3F0EA] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F5D3A] group-hover:opacity-100 focus-visible:opacity-100"
+          className="absolute right-2 top-2 inline-flex items-center gap-1 rounded border border-[#E5E7EB] bg-white px-2 py-1 text-xs text-[#4B5563] transition-colors hover:bg-[#F3F0EA] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F5D3A]"
         >
           {state === "copied" ? (
             <>
