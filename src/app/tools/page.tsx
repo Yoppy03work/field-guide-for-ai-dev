@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { getAllContentMeta } from "@/lib/mdx";
 import { StatusBadge } from "@/components/StatusBadge";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export const metadata: Metadata = {
   title: "ツール一覧 | AI Dev Field Guide",
@@ -45,6 +46,12 @@ export default async function ToolsPage({
 
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-10 md:px-6 md:py-16">
+      <Breadcrumb
+        items={[
+          { href: "/", label: "ホーム" },
+          { label: "ツール一覧" },
+        ]}
+      />
       <header className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight text-[#1F2937] md:text-4xl">
           ツール一覧

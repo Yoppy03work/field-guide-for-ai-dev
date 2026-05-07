@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { StatusBadge } from "@/components/StatusBadge";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export const metadata: Metadata = {
   title: "About | AI Dev Field Guide",
@@ -11,9 +12,38 @@ export const metadata: Metadata = {
 
 const REPO_URL = "https://github.com/Yoppy03work/field-guide-for-ai-dev";
 
+const TIMELINE = [
+  {
+    date: "2026-05-06",
+    title: "MVP 公開（4 ページ）",
+    note: "/ /learn/github /workflow /about を Vercel に deploy。提出物として動く状態に。",
+  },
+  {
+    date: "2026-05-06",
+    title: "ツール一覧 + 7 ツール詳細（PR #9）",
+    note: "/tools と /tools/[slug] が SSG で 7 件生成。リンク 404 を一気に解消。",
+  },
+  {
+    date: "2026-05-06",
+    title: "Cases 4 本（PR #10）",
+    note: "Claude Code / Codex / Antigravity / Vercel の実体験を制作ログ化。",
+  },
+  {
+    date: "2026-05-07",
+    title: "第 2 期: AX/UX 強化と「次の一歩」教材化（PR #16〜#25）",
+    note: "Codex P1 修正 / 共通 4 ブロック / /tutorials 新設 / 全ページ厚塗り。",
+  },
+];
+
 export default function AboutPage() {
   return (
     <article className="mx-auto max-w-[720px] px-4 py-10 md:px-6 md:py-16">
+      <Breadcrumb
+        items={[
+          { href: "/", label: "ホーム" },
+          { label: "About" },
+        ]}
+      />
       <header className="mb-8">
         <StatusBadge status="green" />
         <h1 className="mt-4 text-3xl font-bold tracking-tight text-[#1F2937] md:text-4xl">
@@ -109,6 +139,42 @@ export default function AboutPage() {
           GitHub Issues を開く
           <ExternalLink className="h-4 w-4" aria-hidden="true" />
         </a>
+      </section>
+
+      <section className="mt-8">
+        <h2 className="text-xl font-semibold tracking-tight text-[#1F2937]">
+          制作タイムライン
+        </h2>
+        <ol className="mt-3 space-y-3 border-l-2 border-[#E5E7EB] pl-5">
+          {TIMELINE.map((item, idx) => (
+            <li key={`${item.date}-${idx}`} className="relative">
+              <span
+                className="absolute -left-[27px] mt-1 inline-block h-3 w-3 rounded-full bg-[#2F5D3A]"
+                aria-hidden="true"
+              />
+              <time
+                dateTime={item.date}
+                className="text-xs font-semibold uppercase tracking-wide text-[#4B5563]"
+              >
+                {item.date}
+              </time>
+              <p className="mt-1 font-semibold text-[#1F2937]">{item.title}</p>
+              <p className="mt-1 text-sm leading-relaxed text-[#4B5563]">
+                {item.note}
+              </p>
+            </li>
+          ))}
+        </ol>
+        <p className="mt-3 text-sm text-[#4B5563]">
+          詳しくは{" "}
+          <Link
+            href="/cases"
+            className="font-medium text-[#2F5D3A] underline underline-offset-2 hover:text-[#1B5E20]"
+          >
+            /cases
+          </Link>
+          {" "}に AI ツール別の制作ログがあります。
+        </p>
       </section>
 
       <section className="mt-12 rounded-md border border-[#E5E7EB] bg-[#F3F0EA] p-5 text-sm text-[#4B5563]">

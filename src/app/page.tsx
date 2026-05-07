@@ -202,6 +202,63 @@ export default async function Home() {
         </Link>
       </section>
 
+      <section
+        aria-labelledby="route-heading"
+        className="mt-12 rounded-md border border-[#E5E7EB] bg-[#FBFAF7] p-6 md:p-8"
+      >
+        <p className="text-sm font-semibold uppercase tracking-wide text-[#2F5D3A]">
+          推奨ルート
+        </p>
+        <h2
+          id="route-heading"
+          className="mt-2 text-xl font-bold tracking-tight text-[#1F2937] md:text-2xl"
+        >
+          1 周完走するなら、この順番が早い
+        </h2>
+        <ol className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-4">
+          <li className="rounded-md border border-[#E5E7EB] bg-white p-4">
+            <p className="text-xs font-semibold text-[#2F5D3A]">1. 学ぶ</p>
+            <Link
+              href="/learn/github"
+              className="mt-1 block font-semibold text-[#1F2937] hover:text-[#2F5D3A] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F5D3A]"
+            >
+              /learn/github
+            </Link>
+            <p className="mt-1 text-xs text-[#4B5563]">用語を「ひとことで言うと」で押さえる</p>
+          </li>
+          <li className="rounded-md border border-[#E5E7EB] bg-white p-4">
+            <p className="text-xs font-semibold text-[#2F5D3A]">2. 手を動かす</p>
+            <Link
+              href="/tutorials"
+              className="mt-1 block font-semibold text-[#1F2937] hover:text-[#2F5D3A] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F5D3A]"
+            >
+              /tutorials
+            </Link>
+            <p className="mt-1 text-xs text-[#4B5563]">35 + 25 + 20 分で 3 ハンズオン</p>
+          </li>
+          <li className="rounded-md border border-[#E5E7EB] bg-white p-4">
+            <p className="text-xs font-semibold text-[#2F5D3A]">3. 整理する</p>
+            <Link
+              href="/workflow"
+              className="mt-1 block font-semibold text-[#1F2937] hover:text-[#2F5D3A] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F5D3A]"
+            >
+              /workflow
+            </Link>
+            <p className="mt-1 text-xs text-[#4B5563]">8 ステップに AI を差し込む</p>
+          </li>
+          <li className="rounded-md border border-[#E5E7EB] bg-white p-4">
+            <p className="text-xs font-semibold text-[#2F5D3A]">4. 真似る</p>
+            <Link
+              href="/cases"
+              className="mt-1 block font-semibold text-[#1F2937] hover:text-[#2F5D3A] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F5D3A]"
+            >
+              /cases
+            </Link>
+            <p className="mt-1 text-xs text-[#4B5563]">著者の制作ログを下敷きに</p>
+          </li>
+        </ol>
+      </section>
+
       <section aria-labelledby="flow-heading" className="mt-12">
         <div className="flex items-end justify-between">
           <h2
@@ -320,26 +377,112 @@ export default async function Home() {
         )}
       </section>
 
-      <section
-        aria-labelledby="about-cta-heading"
-        className="mt-12 rounded-md border border-[#E5E7EB] bg-white p-6 text-center md:p-8"
-      >
+      <section aria-labelledby="faq-heading" className="mt-12">
         <h2
-          id="about-cta-heading"
-          className="text-xl font-bold tracking-tight text-[#1F2937]"
+          id="faq-heading"
+          className="text-2xl font-bold tracking-tight text-[#1F2937]"
         >
-          このサイトの目的・著者について
+          よくある質問
         </h2>
-        <p className="mt-2 text-sm text-[#4B5563]">
-          授業課題としての文脈、対象読者、ライセンスは About に書いています。
+        <dl className="mt-6 space-y-4">
+          <div className="rounded-md border border-[#E5E7EB] bg-white p-5">
+            <dt className="font-semibold text-[#1F2937]">
+              Q. プログラミング初心者でも読めますか？
+            </dt>
+            <dd className="mt-2 text-sm leading-relaxed text-[#4B5563]">
+              読めるよう書いてあります。専門用語には初出時に必ず「ひとことで言うと」を併記し、
+              <Link href="/learn/github" className="font-medium text-[#2F5D3A] underline underline-offset-2">/learn/github</Link>
+              {" "}で 9 セクションをやさしく解説しています。
+            </dd>
+          </div>
+          <div className="rounded-md border border-[#E5E7EB] bg-white p-5">
+            <dt className="font-semibold text-[#1F2937]">
+              Q. AI ツールを 1 つも使ったことがありません。何から始めればいい？
+            </dt>
+            <dd className="mt-2 text-sm leading-relaxed text-[#4B5563]">
+              まず{" "}
+              <Link href="/tutorials/github" className="font-medium text-[#2F5D3A] underline underline-offset-2">/tutorials/github</Link>
+              {" "}で GitHub の操作を 1 周してください。AI ツールは Step 3 以降で順次導入します。
+            </dd>
+          </div>
+          <div className="rounded-md border border-[#E5E7EB] bg-white p-5">
+            <dt className="font-semibold text-[#1F2937]">
+              Q. 有料プランは必要？
+            </dt>
+            <dd className="mt-2 text-sm leading-relaxed text-[#4B5563]">
+              本サイトの内容を真似するだけなら、Vercel Hobby（無料）+ GitHub
+              無料 + Gemini 無料枠で完結します。Claude Code は要相談。
+            </dd>
+          </div>
+          <div className="rounded-md border border-[#E5E7EB] bg-white p-5">
+            <dt className="font-semibold text-[#1F2937]">
+              Q. このサイトのソースは公開されていますか？
+            </dt>
+            <dd className="mt-2 text-sm leading-relaxed text-[#4B5563]">
+              はい。コードは MIT、コンテンツは CC BY 4.0 で公開しています：{" "}
+              <a
+                href="https://github.com/Yoppy03work/field-guide-for-ai-dev"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-[#2F5D3A] underline underline-offset-2"
+              >
+                Yoppy03work/field-guide-for-ai-dev
+              </a>
+            </dd>
+          </div>
+          <div className="rounded-md border border-[#E5E7EB] bg-white p-5">
+            <dt className="font-semibold text-[#1F2937]">
+              Q. 内容に間違いがあった / 提案がある場合は？
+            </dt>
+            <dd className="mt-2 text-sm leading-relaxed text-[#4B5563]">
+              GitHub の{" "}
+              <a
+                href="https://github.com/Yoppy03work/field-guide-for-ai-dev/issues"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-[#2F5D3A] underline underline-offset-2"
+              >
+                Issues
+              </a>
+              {" "}でお願いします。
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      <section
+        aria-labelledby="next-action-heading"
+        className="mt-12 rounded-md border-2 border-[#2F5D3A] bg-[#F3F0EA] p-6 text-center md:p-8"
+      >
+        <p className="text-sm font-semibold uppercase tracking-wide text-[#2F5D3A]">
+          次に試すミニ課題
         </p>
-        <Link
-          href="/about"
-          className="mt-4 inline-flex items-center gap-2 rounded-full border border-[#2F5D3A] bg-transparent px-5 py-2 text-sm font-semibold text-[#2F5D3A] transition-colors hover:bg-[#F3F0EA] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F5D3A]"
+        <h2
+          id="next-action-heading"
+          className="mt-2 text-xl font-bold tracking-tight text-[#1F2937] md:text-2xl"
         >
-          About を読む
-          <ArrowRight className="h-4 w-4" aria-hidden="true" />
-        </Link>
+          GitHub で Issue を 1 つ作ってみる
+        </h2>
+        <p className="mt-3 mx-auto max-w-xl text-sm leading-relaxed text-[#1F2937]">
+          5 分でできる、いちばん小さな一歩。タイトルと受け入れ基準を 3 件書くだけで OK。
+          慣れたら Branch を切って PR まで 1 周してみましょう。
+        </p>
+        <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <Link
+            href="/tutorials/github"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#2F5D3A] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#1B5E20] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F5D3A]"
+          >
+            やり方を見る（35 分のハンズオン）
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+          <Link
+            href="/about"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-[#2F5D3A] bg-transparent px-5 py-2.5 text-sm font-semibold text-[#2F5D3A] transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F5D3A]"
+          >
+            About を読む
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </div>
       </section>
     </div>
   );
