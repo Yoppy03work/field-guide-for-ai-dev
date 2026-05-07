@@ -4,6 +4,7 @@ import type {
   HTMLAttributes,
   OlHTMLAttributes,
 } from "react";
+import { CodeBlock } from "@/components/CodeBlock";
 
 const headingBase = "scroll-mt-24 font-semibold tracking-tight text-[#1F2937]";
 
@@ -53,6 +54,7 @@ const defaultComponents: MDXComponents = {
       className="rounded bg-[#F3F0EA] px-1.5 py-0.5 font-mono text-sm text-[#1F2937]"
     />
   ),
+  pre: (props: HTMLAttributes<HTMLPreElement>) => <CodeBlock {...props} />,
 };
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
