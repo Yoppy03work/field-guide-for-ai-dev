@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import LearnGitHubMdx from "@/content/learn/github.mdx";
 import { StatusBadge } from "@/components/StatusBadge";
+import { Toc, type TocItem } from "@/components/Toc";
 
 export const metadata: Metadata = {
   title: "GitHub 入門 | AI Dev Field Guide",
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
     "大学1年生でも読める GitHub の用語解説。Repository / Issue / Branch / Pull Request / Merge を「ひとことで言うと」で順に押さえる。",
 };
 
-const TOC = [
+const TOC: readonly TocItem[] = [
   { id: "section-1", label: "1. GitHub って何？" },
   { id: "section-2", label: "2. リポジトリとは？" },
   { id: "section-3", label: "3. Issue とは？" },
@@ -39,27 +40,8 @@ export default function LearnGitHubPage() {
         <LearnGitHubMdx />
       </article>
 
-      <aside
-        aria-label="目次"
-        className="hidden lg:sticky lg:top-20 lg:block lg:h-fit"
-      >
-        <nav className="rounded-md border border-[#E5E7EB] bg-[#FBFAF7] p-4">
-          <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#4B5563]">
-            目次
-          </h2>
-          <ul className="space-y-1 text-sm">
-            {TOC.map((item) => (
-              <li key={item.id}>
-                <a
-                  href={`#${item.id}`}
-                  className="block rounded px-2 py-1 text-[#1F2937] hover:bg-[#F3F0EA] hover:text-[#2F5D3A] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F5D3A]"
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
+      <aside className="hidden lg:sticky lg:top-20 lg:block lg:h-fit">
+        <Toc items={TOC} />
       </aside>
     </div>
   );
