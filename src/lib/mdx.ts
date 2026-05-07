@@ -6,6 +6,7 @@ import {
   type FrontmatterFor,
   isCategory,
   isStatus,
+  isTutorialDifficulty,
 } from "./content-types";
 
 const CONTENT_DIR = path.join(process.cwd(), "src", "content");
@@ -86,6 +87,39 @@ function validateCase(
   }
 }
 
+function validateTutorial(
+  data: Record<string, unknown>,
+  filePath: string,
+): void {
+  validateBase(data, filePath);
+  if (typeof data["estimatedMinutes"] !== "number") {
+    throw new Error(
+      `Tutorial frontmatter "estimatedMinutes" must be a number in ${filePath}`,
+    );
+  }
+  if (!isTutorialDifficulty(data["difficulty"])) {
+    throw new Error(
+      `Tutorial frontmatter "difficulty" must be "beginner" | "intermediate" | "advanced" in ${filePath}`,
+    );
+  }
+  const prerequisites = data["prerequisites"];
+  if (prerequisites !== undefined) {
+    if (
+      !Array.isArray(prerequisites) ||
+      !prerequisites.every((p): p is string => typeof p === "string")
+    ) {
+      throw new Error(
+        `Tutorial frontmatter "prerequisites" must be a string[] if present (in ${filePath})`,
+      );
+    }
+  }
+  if (data["order"] !== undefined && typeof data["order"] !== "number") {
+    throw new Error(
+      `Tutorial frontmatter "order" must be a number if present (in ${filePath})`,
+    );
+  }
+}
+
 function castFrontmatter<C extends Category>(
   category: C,
   data: Record<string, unknown>,
@@ -95,6 +129,8 @@ function castFrontmatter<C extends Category>(
     validateTool(data, filePath);
   } else if (category === "cases") {
     validateCase(data, filePath);
+  } else if (category === "tutorials") {
+    validateTutorial(data, filePath);
   } else {
     validateBase(data, filePath);
   }
@@ -159,6 +195,15 @@ function sortMeta<C extends Category>(
       const ad = (a as unknown as { date: string }).date;
       const bd = (b as unknown as { date: string }).date;
       return bd.localeCompare(ad);
+    });
+  }
+  if (category === "tutorials") {
+    return [...items].sort((a, b) => {
+      const ao =
+        (a as unknown as { order?: number }).order ?? Number.MAX_SAFE_INTEGER;
+      const bo =
+        (b as unknown as { order?: number }).order ?? Number.MAX_SAFE_INTEGER;
+      return ao - bo;
     });
   }
   return items;

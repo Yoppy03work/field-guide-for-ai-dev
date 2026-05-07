@@ -175,6 +175,33 @@ export default async function Home() {
         </Link>
       </section>
 
+      <section
+        aria-labelledby="tutorials-heading"
+        className="mt-12 rounded-md border border-[#E5E7EB] bg-white p-6 md:p-8"
+      >
+        <p className="text-sm font-semibold uppercase tracking-wide text-[#2F5D3A]">
+          手を動かす
+        </p>
+        <h2
+          id="tutorials-heading"
+          className="mt-2 text-2xl font-bold tracking-tight text-[#1F2937] md:text-3xl"
+        >
+          チュートリアルで GitHub → Vercel → Antigravity を 1 周
+        </h2>
+        <p className="mt-3 max-w-2xl text-base leading-relaxed text-[#1F2937]">
+          読むだけで終わらせない、自分の手元で完走できるハンズオン。
+          各チュートリアルは 15〜30 分で完了、末尾のセルフチェックで
+          「できたか」を確かめられます。
+        </p>
+        <Link
+          href="/tutorials"
+          className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#2F5D3A] bg-transparent px-5 py-2.5 text-sm font-semibold text-[#2F5D3A] transition-colors hover:bg-[#F3F0EA] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F5D3A]"
+        >
+          チュートリアルを見る
+          <ArrowRight className="h-4 w-4" aria-hidden="true" />
+        </Link>
+      </section>
+
       <section aria-labelledby="flow-heading" className="mt-12">
         <div className="flex items-end justify-between">
           <h2

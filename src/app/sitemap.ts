@@ -9,6 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/`, lastModified, priority: 1 },
     { url: `${SITE_URL}/learn/github`, lastModified, priority: 0.9 },
     { url: `${SITE_URL}/workflow`, lastModified, priority: 0.9 },
+    { url: `${SITE_URL}/tutorials`, lastModified, priority: 0.85 },
     { url: `${SITE_URL}/tools`, lastModified, priority: 0.7 },
     { url: `${SITE_URL}/cases`, lastModified, priority: 0.7 },
     { url: `${SITE_URL}/about`, lastModified, priority: 0.5 },
@@ -28,5 +29,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticEntries, ...toolEntries, ...caseEntries];
+  const tutorials = await getAllContentMeta("tutorials");
+  const tutorialEntries: MetadataRoute.Sitemap = tutorials.map((t) => ({
+    url: `${SITE_URL}/tutorials/${t.slug}`,
+    lastModified,
+    priority: 0.7,
+  }));
+
+  return [
+    ...staticEntries,
+    ...tutorialEntries,
+    ...toolEntries,
+    ...caseEntries,
+  ];
 }
