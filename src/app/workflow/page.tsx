@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import WorkflowMdx from "@/content/workflow/steps.mdx";
 import { StatusBadge } from "@/components/StatusBadge";
+import { Toc, type TocItem } from "@/components/Toc";
 
 export const metadata: Metadata = {
   title: "AI 開発フローの全体像 | AI Dev Field Guide",
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
     "Issue → Branch → Claude Code → PR → Codex → Antigravity → Vercel Preview → Merge までの 8 ステップを、初心者がハマりどころと AI の使い方付きで解説。",
 };
 
-const TOC = [
+const TOC: readonly TocItem[] = [
   { id: "step-1", label: "Step 1: Issue を立てる" },
   { id: "step-2", label: "Step 2: Branch を切る" },
   { id: "step-3", label: "Step 3: Claude Code に依頼" },
@@ -43,27 +44,8 @@ export default function WorkflowPage() {
         <WorkflowMdx />
       </article>
 
-      <aside
-        aria-label="目次"
-        className="hidden lg:sticky lg:top-20 lg:block lg:h-fit"
-      >
-        <nav className="rounded-md border border-[#E5E7EB] bg-[#FBFAF7] p-4">
-          <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#4B5563]">
-            目次
-          </h2>
-          <ul className="space-y-1 text-sm">
-            {TOC.map((item) => (
-              <li key={item.id}>
-                <a
-                  href={`#${item.id}`}
-                  className="block rounded px-2 py-1 text-[#1F2937] hover:bg-[#F3F0EA] hover:text-[#2F5D3A] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F5D3A]"
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
+      <aside className="hidden lg:sticky lg:top-20 lg:block lg:h-fit">
+        <Toc items={TOC} />
       </aside>
     </div>
   );
