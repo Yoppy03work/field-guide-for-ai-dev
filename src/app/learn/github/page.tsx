@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import LearnGitHubMdx from "@/content/learn/github.mdx";
 import { StatusBadge } from "@/components/StatusBadge";
 import { Toc, type TocItem } from "@/components/Toc";
+import { Breadcrumb } from "@/components/Breadcrumb";
+import { ReadingTime } from "@/components/ReadingTime";
 
 export const metadata: Metadata = {
   title: "GitHub 入門 | AI Dev Field Guide",
@@ -22,12 +24,26 @@ const TOC: readonly TocItem[] = [
   { id: "mini-task", label: "ミニ課題" },
 ];
 
+// 概算 18 分（本文約 11000 字 / 600 字/分）。手動指定は frontmatter ではなく
+// ここでハードコード（拡張時に再計測する）。
+const APPROX_READING_MINUTES = 18;
+
 export default function LearnGitHubPage() {
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-8 md:px-6 md:py-12 lg:grid lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-12">
       <article className="min-w-0 max-w-[720px]">
+        <Breadcrumb
+          items={[
+            { href: "/", label: "ホーム" },
+            { href: "/learn/github", label: "学ぶ" },
+            { label: "GitHub 入門" },
+          ]}
+        />
         <header className="mb-8">
-          <StatusBadge status="green" />
+          <div className="flex flex-wrap items-center gap-3">
+            <StatusBadge status="green" />
+            <ReadingTime minutes={APPROX_READING_MINUTES} />
+          </div>
           <h1 className="mt-4 text-3xl font-bold tracking-tight text-[#1F2937] md:text-4xl">
             GitHub 入門
           </h1>

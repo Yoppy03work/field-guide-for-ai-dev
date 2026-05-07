@@ -2,106 +2,269 @@
 title: "GitHub チュートリアル"
 slug: github
 status: green
-estimatedMinutes: 30
+estimatedMinutes: 35
 difficulty: beginner
 order: 1
 prerequisites:
   - "ブラウザ（Chrome / Safari / Firefox など）"
-  - "メールアドレス"
+  - "メールアドレス（GitHub アカウント用）"
 ---
 
 import { Callout } from "@/components/Callout";
 
 <Callout type="info" title="このチュートリアルでやること">
-  GitHub アカウント作成 → 最初のリポジトリ → 最初の Pull Request → マージ
-  までを 30 分でなぞります。終わったら「自分の repo で Issue → PR を回す」
-  動きが体に入ります。
+  GitHub アカウント作成 → 最初のリポジトリ → Issue → Branch → コミット →
+  Pull Request → Merge までを 35 分でなぞります。終わったら「自分の repo
+  で AI 開発フローの 1 周」が体に入ります。
 </Callout>
 
 ## 前提
 
 - ブラウザがあれば OK（Git のローカルインストールは任意）
 - メールアドレスが必要（GitHub アカウント用）
+- 用語の意味は [/learn/github](/learn/github) で先に押さえると、操作の意味がわかりやすい
 
-## ステップ 1: アカウントを作る
+## 全体像（5 分）
+
+このチュートリアルでは、以下の流れを 1 周します。
+
+```text
+1. アカウント作成
+2. リポジトリを作る
+3. README を直接コミット
+4. Issue を立てる
+5. Branch を切って編集 + Pull Request
+6. PR をマージ
+7. 振り返り
+```
+
+普段の AI 開発フロー（Issue → Branch → Claude Code → PR → Codex → Merge）の
+**人間が押さえるべき骨格**だけを通します。
+
+## ステップ 1: アカウントを作る（5 分）
 
 **やること**
 
 1. [https://github.com/signup](https://github.com/signup) を開く
 2. メール / パスワード / ユーザー名を入力
-3. メール認証を完了
+3. 確認のためのパズルに答える（簡単な視覚クイズ）
+4. メール認証を完了
 
 **期待される結果**
 
-- ダッシュボード（緑色のアクティビティグリッドが見えるホーム）に着地
+- ダッシュボード（左に「Recent」、中央に「Recommended for you」が並ぶホーム）に着地
 
 **うまくいかない時**
 
-- メールが届かない → 迷惑メールフォルダを確認
-- ユーザー名が使えない → 他の候補を試す（後から変えにくいので慎重に）
+- メールが届かない → 迷惑メール / プロモーションタブを確認
+- ユーザー名が使えない → 別の候補を試す（後から変えにくいので、長く付き合える名前を）
+- パズルが通らない → 別ブラウザ / シークレットモードで試す
 
-## ステップ 2: 最初のリポジトリを作る
+<Callout type="tip" title="ユーザー名の決め方">
+  `@username/repo-name` の形で世界中に出るので、SNS 名と揃えると識別しやすい。
+  本名を避けたいなら、シンプルな英単語の組み合わせがおすすめ。
+</Callout>
+
+## ステップ 2: 最初のリポジトリを作る（3 分）
 
 **やること**
 
 1. 右上の `+` → `New repository`
-2. Repository name に `hello-world` などを入力
-3. `Public` を選択、`Initialize with README` をチェック
-4. `Create repository`
+2. **Repository name**: `hello-world`（好きな名前で OK）
+3. **Description**: `My first repo`（任意）
+4. **Public** を選択（後から変えられる）
+5. **Add a README file** にチェック
+6. `Create repository`
 
 **期待される結果**
 
 - README.md が見えるリポジトリページに遷移
+- URL は `https://github.com/<あなたのユーザー名>/hello-world`
 
-## ステップ 3: README を編集して直接コミット
+**うまくいかない時**
+
+- repo 名が使えない → 他の名前（`my-first-repo` など）に変える
+- README が表示されない → リロード、または「Add a README file」を入れずに作った可能性 → repo 上部の `Add a README` ボタンから追加
+
+## ステップ 3: README を直接コミット（3 分）
+
+main ブランチに直接書く小さな練習です。
 
 **やること**
 
 1. README.md を開いて鉛筆アイコン（Edit）をクリック
-2. 1 行追加（例：「自分の名前」）
-3. 下の `Commit changes...` → `Commit directly to main`
+2. 1 行追加（例：`# Hello, GitHub!`）
+3. 下にスクロール → `Commit changes...`
+4. ダイアログで `Commit directly to the main branch` を選択
+5. `Commit changes`
 
 **期待される結果**
 
-- main ブランチに変更が記録され、最新のコミットが見える
+- README が更新され、最新コミットメッセージ（自動生成）がトップに表示
+- リポジトリページの「commits」が `2 commits` になる
 
-## ステップ 4: Branch を切って PR を作る
+<Callout type="warn" title="本物の運用では main 直接コミットは控える">
+  練習では OK ですが、チームや自分のサイトを運用するときは、後述の Branch
+  + PR を経由するのが安全です。次のステップから本格運用の練習に入ります。
+</Callout>
+
+## ステップ 4: Issue を立てる（3 分）
 
 **やること**
 
-1. README.md を再度編集する画面に入り、別の 1 行を追加
-2. `Commit changes...` → 今度は `Create a new branch and start a pull request` を選ぶ
-3. ブランチ名を `feature/intro` にして `Propose changes`
-4. PR 作成画面で `Create pull request`
+1. リポジトリの上部タブから `Issues` を開く
+2. `New issue` をクリック
+3. **Title**: `自己紹介を README に追加する`
+4. **Description**:
+
+   ````markdown
+   ## やりたいこと
+   README に「## 自己紹介」セクションを追加する。
+
+   ## 受け入れ基準
+   - [ ] 名前 / 学年 / 興味 を1行ずつ書く
+   - [ ] PR を出して main にマージされている
+   ````
+
+5. `Submit new issue`
 
 **期待される結果**
 
-- 「Open」状態の Pull Request が作成される
+- Issue #1 が作成され、Open 状態で表示される
 
 **うまくいかない時**
 
-- PR 画面で「Compare base / compare」が main / feature/intro になっているか確認
+- Markdown が崩れる → Description のプレビュータブで確認、改行は空行で
 
-## ステップ 5: マージする
+## ステップ 5: Branch を切って編集 + PR を作る（10 分）
+
+ここが本題。「Issue → Branch → 編集 → PR」の流れを 1 周します。
+
+### 5-A. Branch を切る
 
 **やること**
 
-1. PR 画面で `Merge pull request` → `Confirm merge`
-2. ブランチを削除（`Delete branch`）してもよい
+1. リポジトリトップ（Code タブ）に戻る
+2. ブランチ切替ボタン（左側の `main ▼`）をクリック
+3. テキストボックスに `feature/profile-card` と入力
+4. `Create branch: feature/profile-card from main` をクリック
 
 **期待される結果**
 
-- main に変更が反映され、PR が「Merged」表示に
+- 自動で `feature/profile-card` ブランチに切り替わる
+- ブランチ切替ボタンの表示が `feature/profile-card ▼` になる
+
+### 5-B. ブランチで README を編集
+
+**やること**
+
+1. `feature/profile-card` ブランチで README.md を開く
+2. 鉛筆アイコン（Edit）をクリック
+3. 末尾に追記：
+
+   ```markdown
+
+   ## 自己紹介
+
+   - 名前: あなたの名前
+   - 学年: 大学1年
+   - 興味: AI 開発フロー
+   ```
+
+4. `Commit changes...`
+5. **`Commit directly to the feature/profile-card branch`** を選択
+6. Commit message を確認して `Commit changes`
+
+**期待される結果**
+
+- `feature/profile-card` ブランチに新しいコミットが乗る
+- main は変更されていない
+
+### 5-C. Pull Request を作る
+
+**やること**
+
+1. リポジトリトップに戻ると、黄色のバナー `feature/profile-card had recent pushes` → `Compare & pull request`
+2. PR 作成画面で：
+   - **Title**: `自己紹介を README に追加`
+   - **Description**:
+
+     ```markdown
+     Closes #1
+
+     ## このPRで何をしたか
+     README に「## 自己紹介」セクションを追加。
+     ```
+
+3. `Create pull request`
+
+**期待される結果**
+
+- PR #2（番号は環境による）が Open 状態で作成
+- 下部に「This branch has no conflicts with the base branch」と表示
+
+**うまくいかない時**
+
+- バナーが出ない → `Pull requests` タブから `New pull request` で base=main / compare=feature/profile-card を手動指定
+- `Closes #1` が効かない → `Closes #` の後に半角スペースを入れない、Description 欄に書く
+
+<Callout type="tip" title="Closes #N の威力">
+  PR Description に `Closes #1` と書くと、マージ時に Issue #1 が自動で
+  Close される。手動 Close を忘れない仕組みです。
+</Callout>
+
+## ステップ 6: PR をマージ（3 分）
+
+**やること**
+
+1. PR 画面で `Merge pull request` をクリック
+2. `Confirm merge`
+3. マージ完了後 `Delete branch` をクリックしてブランチを削除（GitHub 上のみ）
+
+**期待される結果**
+
+- PR が `Merged` 表示に
+- main の README に自己紹介セクションが反映
+- Issue #1 が自動で `Closed` に
+
+**うまくいかない時**
+
+- Merge ボタンが押せない → 「This branch must be made up to date」が出ていたら `Update branch`
+- マージ後に main の README が変わっていない → ブラウザのキャッシュ。リロードで確認
+
+## ステップ 7: 振り返り（3 分）
+
+**やること**
+
+1. リポジトリトップ → `Insights` → `Network` または `commits` を開く
+2. main に「自己紹介追加」のコミットが乗っているのを確認
+3. Issues タブで Issue #1 が Closed になっていることを確認
+4. Pull requests タブで PR が Merged になっていることを確認
+
+**期待される結果**
+
+- 1 つの「やりたいこと」が、Issue → Branch → PR → Merge の流れで本流に取り込まれた、と説明できる
 
 ## できたか確認
 
 - [ ] GitHub アカウントを作って main に最初のコミットを置けた
-- [ ] feature/intro ブランチで PR を作れた
-- [ ] PR を Merge して main に取り込めた
+- [ ] Issue #1 を作れた
+- [ ] `feature/profile-card` ブランチで編集 + PR を作れた
+- [ ] PR を Merge して、Issue が自動 Close されたのを見た
+- [ ] 自分の言葉で「Issue → Branch → PR → Merge」を 1 行で説明できる
 - [ ] うまくいかなかった場所を 1 つ説明できる
+
+## ハマりどころまとめ
+
+- main に直接 commit してしまった → 練習では OK、本番運用では Branch を切る
+- ブランチ切替を忘れた状態で編集した → URL のブランチ名（`/blob/<branch>/...`）を確認
+- PR の base / compare が逆 → base=main / compare=feature ブランチが正しい
+- `Closes #N` が効かない → 大文字小文字、`#` の前後の半角スペース、`Description` 欄に書く
+- ブランチが消せない → main にマージ済みでないと削除メッセージが出ない
 
 ## 次のステップ
 
-- [/tutorials/vercel](/tutorials/vercel) でこの repo を Vercel に deploy する
+- [/tutorials/vercel](/tutorials/vercel) で、いま作った repo を Vercel に deploy する
 - [/learn/github](/learn/github) で各用語の意味を復習する
 - [/workflow](/workflow) で AI を差し込む 8 ステップを見る
+- [/tools/github](/tools/github) で開発フローでの GitHub の使い分けを整理する
