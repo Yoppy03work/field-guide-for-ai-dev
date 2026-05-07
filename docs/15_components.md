@@ -199,8 +199,8 @@ import { ReadingTime } from "@/components/ReadingTime";
 
 ```ts
 type ReadingTimeProps = {
-  text?: string;       // 指定時は minutes より優先される自動算出
-  minutes?: number;    // 手動上書き
+  text?: string;       // 基本はこちらを渡して自動算出
+  minutes?: number;    // 手動上書き。両方渡された場合は minutes が優先される
   className?: string;
 };
 ```
