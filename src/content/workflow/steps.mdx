@@ -5,6 +5,7 @@ status: green
 ---
 
 import { Mermaid } from "@/components/Mermaid";
+import { Callout } from "@/components/Callout";
 
 <section className="my-8">
 
@@ -23,6 +24,13 @@ import { Mermaid } from "@/components/Mermaid";
 
 </section>
 
+<Callout type="info" title="このページの読み方">
+  各ステップは同じフォーマットで書かれています：**何をするのか / なぜ
+  必要なのか / 初心者がハマりやすいところ / AI ツールをどう使うのか /
+  自分で試すための小さな課題 / 次は…**。実プロンプト例とよくある質問も
+  挟んでいます。詰まったら一つ前のステップに戻るのが基本です。
+</Callout>
+
 <section id="step-1" className="scroll-mt-24">
 
 ## Step 1: Issue を立てる
@@ -36,19 +44,35 @@ import { Mermaid } from "@/components/Mermaid";
 - 後から「なぜこの変更を入れたか」を追える
 - チームに作業内容が見える化される
 - AI に「この Issue の通りに実装して」と依頼できる入口になる
+- レビュアーが「何を達成すべきか」を読まなくて済む
 
 **初心者がハマりやすいところ**
 
 - タイトルが曖昧（例：「修正」「アップデート」だけ）
 - 受け入れ基準が書かれない → 「どこまでやれば完了か」が分からない
+- 1 つの Issue に複数の独立した変更を詰め込む（PR が大きくなり、レビュー困難）
+- 既存 Issue を検索せずに重複起票
 
 **AI ツールをどう使うのか**
 
-- ChatGPT などで「この機能の Issue を書いて」と相談すると、構造の整った下書きが得られる
+- ChatGPT / Claude（Web 版）に「この機能の Issue を書いて」と相談すると、構造の整った下書きが得られる
+- Claude Code に「Issue #N を読んで実装計画を提案して」と渡せば、実装に入る前の合意形成ができる
+
+<Callout type="tip" title="実プロンプト例">
+  `次の機能を実装したい：「ホームに自己紹介カードを追加する」。GitHub の Issue として書きたいので、タイトル、やりたいこと、受け入れ基準（チェックリスト形式で 3〜5 件）を提案してください。`
+</Callout>
+
+**よくある質問**
+
+- Q: 「ちょっとした修正」も Issue を立てるべき？ → A: タイポ修正レベルなら省略 OK、ロジック変更なら立てる
+- Q: 自分のリポジトリでも Issue を立てる意味は？ → A: 1 ヶ月後の自分が「なぜこの変更をした？」を読める
+- Q: 受け入れ基準が思いつかない → A: 「画面に〇〇が表示される」「Tab が通る」など、目視できる条件で OK
 
 **自分で試すための小さな課題**
 
-- 自分のリポジトリで Issue を1つ起票してみる
+- 自分のリポジトリで Issue を1つ起票してみる（受け入れ基準 3 件付き）
+
+**次は: [Step 2: Branch を切る](#step-2)**
 
 </section>
 
@@ -65,19 +89,41 @@ import { Mermaid } from "@/components/Mermaid";
 - main を壊さないため
 - 並行で複数の作業を進められる
 - 失敗してもブランチごと捨てられる
+- PR の単位が明確になる（1 ブランチ = 1 つの目的）
 
 **初心者がハマりやすいところ**
 
-- ブランチ名が雑（例：`test`, `tmp`）
-- main で直接作業してしまう
+- ブランチ名が雑（例：`test`, `tmp`、後から何の作業か思い出せない）
+- main で直接作業してしまう（ブランチ切替の確認を忘れる）
+- 1 ブランチに複数の独立した変更を詰める（PR が分割しにくくなる）
+- main を最新化せずにブランチを切る（後でコンフリクトの原因に）
 
 **AI ツールをどう使うのか**
 
-- Claude Code に「`feature/profile-card` で作業を進めて」と伝えると、その文脈を保持してくれる
+- Claude Code に `feature/profile-card で作業を進めて` と冒頭で伝えると、その文脈を保持してくれる
+- ブランチ名の規約（`<種類>/<issue#>-<説明>`）を CLAUDE.md に書いておくと AI が遵守する
+
+<Callout type="tip" title="ブランチ命名の型">
+  - `feat/12-login-form` ― 新機能
+  - `fix/34-mobile-overflow` ― バグ修正
+  - `chore/56-cleanup` ― 整理
+  - `docs/78-readme` ― ドキュメント
+
+  種類で検索でき、Issue 番号で履歴を辿れる。
+</Callout>
+
+**よくある質問**
+
+- Q: GitHub Web UI でもブランチ切れる？ → A: Code タブの `main ▼` から作れる（[/tutorials/github](/tutorials/github) で実演）
+- Q: ブランチをローカルで切る？Web UI で切る？ → A: どちらでも OK。チーム合意で揃えるとミスが減る
+- Q: 古いブランチが残ってしまう → A: PR Merge 時の「Delete branch」ボタンで削除がおすすめ
 
 **自分で試すための小さな課題**
 
-- `git switch -c feature/test` で新しいブランチを作る
+- `git switch -c feat/test` で新しいブランチを作る（または GitHub Web UI で）
+
+**ここで詰まったら**: Step 1 で Issue 番号がついていないと、ブランチ命名のルールが揺れます。
+**次は: [Step 3: Claude Code に実装を依頼する](#step-3)**
 
 </section>
 
@@ -93,20 +139,44 @@ Issue の内容を Claude Code に伝えて、実装を進めてもらう。
 
 - 実装の手数を減らせる
 - 人間はレビューと判断に集中できる
+- 「指示 → 実装 → 確認」のサイクルを回しやすい
 
 **初心者がハマりやすいところ**
 
 - プロンプトが粗くて意図が伝わらない
 - `CLAUDE.md` がないと、プロジェクト固有の文脈が薄くなる
+- 大きすぎるタスクを 1 回で投げる → 中盤でブレる
+- 破壊的操作（rm / reset）の確認運用がない → 事故る
+- 「全部 Claude に任せる」になり、人間の判断が抜ける
 
 **AI ツールをどう使うのか**
 
 - Issue の内容をそのままコピーして渡すのが手堅い
 - プロジェクト方針は `CLAUDE.md` に書いておく
+- 1 回の依頼を「30 分以内で終わる粒度」に切る
+- 破壊的変更の前に「差分を見せて」と言う
+
+<Callout type="tip" title="実プロンプト例">
+  `Issue #N の通りに、feat/N-profile-card ブランチで自己紹介カードを実装してください。docs/04_content.md に文言があります。重要な変更前は git diff の概要を提示してください。`
+</Callout>
+
+<Callout type="warn" title="やりがちな失敗">
+  「いい感じに作って」だけの指示は AI が広く解釈し、想定外のファイルを
+  触ることがある。**何 / どこ / どこまで** を明示するのが安全。
+</Callout>
+
+**よくある質問**
+
+- Q: Claude Code と GitHub Copilot の使い分けは？ → A: Claude Code は対話型・複数ファイル横断、Copilot は流れの中の補完。詳細は [/tools/claude-code](/tools/claude-code)
+- Q: CLAUDE.md がない repo では使えない？ → A: 使えるけど、プロジェクト方針を毎回プロンプトで補う必要が出る
+- Q: AI の出力をそのまま commit していい？ → A: 必ず差分を読む。Codex のレビューも併用すれば二段構え
 
 **自分で試すための小さな課題**
 
-- 自分のリポジトリで Claude Code に「README に1行追加して」と依頼してみる
+- 自分のリポジトリで Claude Code に「README に1行追加して」と依頼
+
+**ここで詰まったら**: Step 1 の Issue 内容が薄いと、AI も曖昧な実装をします。Issue を厚くしましょう。
+**次は: [Step 4: PR を作る](#step-4)**
 
 </section>
 
@@ -122,19 +192,38 @@ Issue の内容を Claude Code に伝えて、実装を進めてもらう。
 
 - レビューを受けて本流に取り込むため
 - 変更の意図と差分を 1 か所にまとめられる
+- AI レビュー（Codex）と人間レビューを並列で受けられる
+- 後から「いつ何が main に入ったか」が読める
 
 **初心者がハマりやすいところ**
 
 - description（説明欄）が空
-- 関連 Issue がリンクされない
+- 関連 Issue がリンクされない（`Closes #N` を書かない）
+- スクショや動作確認結果が無く、レビュアーが手元で実行する手間が出る
+- 1 PR が大きすぎる（レビューが諦められる）
+- ベース / 比較ブランチが逆
 
 **AI ツールをどう使うのか**
 
-- PR テンプレに「Codex への指示」「Antigravity への指示」欄を用意しておくと、AI レビューの精度が上がる
+- PR テンプレに「Codex への指示」「Antigravity への指示」欄を用意しておくと、AI レビューの的が絞れる
+- description は Claude Code に「変更点をまとめて」と頼める
+
+<Callout type="tip" title="実プロンプト例">
+  `この PR の description を書いてください。Closes #N、何をしたか 1 行、変更したファイル一覧と各々の役割、Codex にチェックして欲しい観点 3 つを含めてください。`
+</Callout>
+
+**よくある質問**
+
+- Q: PR タイトルの prefix は？ → A: `feat: / fix: / chore: / docs:` を Conventional Commits 風にすると履歴が読みやすい
+- Q: WIP（途中）でも PR 作れる？ → A: Draft PR にすれば OK。レビューは Ready 後
+- Q: Description に何を書く？ → A: 「何 / なぜ / 動作確認」の 3 行で十分
 
 **自分で試すための小さな課題**
 
-- PR を1つ出して description にスクリーンショットを貼る
+- PR を1つ出して description にスクショを貼る
+
+**ここで詰まったら**: Step 2 で main が最新でなかった場合、PR にコンフリクトが出ます。
+**次は: [Step 5: Codex にレビュー](#step-5)**
 
 </section>
 
@@ -150,19 +239,41 @@ PR に対して Codex が自動でレビューコメントを付ける。型エ�
 
 - 型エラー / 命名 / テスト漏れを人間レビュー前にフィルタできる
 - 人間レビュアーは設計判断に集中できる
+- 機械的に拾える指摘を 24 時間自動で出してくれる
 
 **初心者がハマりやすいところ**
 
-- 的外れな指摘もある（全部対応しなくていい）
+- 的外れな指摘もある（全部対応しなくていい、判断は人間）
 - 設計レビューまでは Codex の守備範囲外
+- 指摘を全部潰すまで merge しない、と思い込む（重要度を判断する）
+- AI レビュー任せで、人間が PR を全く読まない
 
 **AI ツールをどう使うのか**
 
 - PR テンプレに「設計の根拠」を書くと Codex の判断精度が上がる
+- 指摘ごとに「対応 / 対応しない理由 / Issue 化」を PR コメントに残す
+- 何度も繰り返し指摘される観点は CLAUDE.md / AGENTS.md に書いておく
+
+<Callout type="tip" title="重要度の見極め">
+  Codex の指摘には P1 critical / P2 yellow / P3 grey のような重要度が
+  付くことが多い：
+  - **P1**: 同 PR で必ず対応（バグ / セキュリティ）
+  - **P2**: 原則対応、外す場合は理由を明記
+  - **P3**: 次の PR or Issue 化で OK
+</Callout>
+
+**よくある質問**
+
+- Q: Codex の代わりに人間だけでも OK？ → A: もちろん OK。AI レビューはフィルタの 1 つ
+- Q: Codex が動かない → A: PR を Draft → Ready にする、`@codex review` でリクエスト
+- Q: 指摘が多すぎて萎える → A: 重要度で絞る。本サイトでも 5 件あれば P1 から対応
 
 **自分で試すための小さな課題**
 
 - 自分の PR で Codex の指摘を1つ取り込む
+
+**ここで詰まったら**: Step 4 で description が空だと Codex の指摘もぼやけがち。設計の根拠を書きましょう。
+**次は: [Step 6: Antigravity で画面確認](#step-6)**
 
 </section>
 
@@ -178,19 +289,41 @@ Antigravity（ブラウザ操作 AI）にプレビュー URL を渡し、画面�
 
 - 人間の目では見落とすレイアウト崩れを拾える
 - スクショと一緒に報告してもらえる
+- モバイル / デスクトップなど複数のビューポートを機械的にチェックできる
 
 **初心者がハマりやすいところ**
 
 - 待ち時間の指示が必要（「30 秒見て」など）
 - スクショ保存先を明示するとレビューしやすい
+- 観点を絞らないと「特に問題なし」で終わる
+- 1 回の結果を「いつも効く」と過剰一般化（🟡）
 
 **AI ツールをどう使うのか**
 
 - プレビュー URL を渡して「30 秒見て報告して」が王道
+- 観点を 3 つ以内に絞る（横スクロール / 要素重なり / ファーストビュー文言）
+- 「致命 / 軽微」で要約させると report が読みやすい
+
+<Callout type="tip" title="実プロンプト例">
+  `このプレビュー URL を 30 秒見て、以下を報告してください。 URL: <Preview URL> ビューポート: 375x812 観点: 1) レイアウト崩れ 2) ファーストビュー文言 3) フォーカス可視化 報告は「致命 / 軽微」で分けて、それぞれ 1 行で。`
+</Callout>
+
+<Callout type="warn" title="🟡 体験範囲">
+  Antigravity は著者が 1 回試したベース。複数回試して初めて
+  「自分の道具」になります。詳細は [/tutorials/antigravity](/tutorials/antigravity)。
+</Callout>
+
+**よくある質問**
+
+- Q: Antigravity が無くても代替できる？ → A: Playwright / Cypress などのテストでも近いことができる
+- Q: モバイル / PC を両方見せたい → A: 同じ指示でビューポートだけ変えて 2 回投げる
 
 **自分で試すための小さな課題**
 
 - 自分のプレビュー URL を Antigravity に渡してみる
+
+**ここで詰まったら**: Step 7 の Vercel Preview が動いていないと URL がありません。先に Step 7 の準備を。
+**次は: [Step 7: Vercel Preview で確認](#step-7)**
 
 </section>
 
@@ -206,19 +339,37 @@ PR ごとに発行される Preview URL を実機で開いて動作確認する�
 
 - 本番反映前に画面で動作確認できる
 - 環境差を減らした状態でレビュアーに渡せる
+- スマホ / PC など複数の環境で気軽に試せる
 
 **初心者がハマりやすいところ**
 
 - 環境変数の差異でローカルと挙動が違う
-- ビルドエラーで Preview が出ない
+- ビルドエラーで Preview が出ない（Vercel ダッシュボード → Build Logs を読む）
+- Preview URL と Production URL を取り違えて報告
+- CDN キャッシュで古いまま見えるときがある（ハードリロード）
 
 **AI ツールをどう使うのか**
 
-- Antigravity が URL を回遊できるので、Preview と組み合わせると効果的
+- Antigravity が URL を回遊できるので、Preview と組み合わせると効果的（[Step 6](#step-6) と二段構え）
+- 自分用のチェックリストを CLAUDE.md に置いて、Claude Code に「Preview URL の動作確認手順を出して」と頼める
+
+**よくある質問**
+
+- Q: Preview URL はいつまで残る？ → A: PR が Open の間。Close / Merge 後も Deployment 履歴から再生可能
+- Q: スマホで見るには？ → A: PR コメントの URL を共有 / QR コード化アプリで
+- Q: ビルドが失敗する → A: [/tutorials/vercel](/tutorials/vercel) のステップ 4 で「ログを読む練習」
+
+<Callout type="tip" title="commit 別 URL">
+  `<repo>-<sha>.vercel.app` という commit hash 付き URL も発行されます。
+  「修正前」と「修正後」を別タブで並べると、変化が一目でわかります。
+</Callout>
 
 **自分で試すための小さな課題**
 
 - 自分の PR の Preview URL をスマホでも開いてみる
+
+**ここで詰まったら**: Step 4 の PR が無い、または Step 1〜3 が未完了で repo に commit が無い場合、Preview URL は出ません。
+**次は: [Step 8: Merge して公開](#step-8)**
 
 </section>
 
@@ -234,18 +385,48 @@ PR ごとに発行される Preview URL を実機で開いて動作確認する�
 
 - レビュー済みの変更だけが本番に入る
 - マージのタイミングと履歴がはっきり残る
+- 「いつ何が main に入ったか」を後から `git log` で追える
 
 **初心者がハマりやすいところ**
 
 - Squash / Merge / Rebase の違いを理解せずに押す
 - 急いでマージしてしまい、後から差し戻しになる
+- マージ前に Preview URL の最終確認を忘れる
+- Branch protection なしで他人がいきなりマージしてしまう（人数増えたら設定）
 
 **AI ツールをどう使うのか**
 
 - マージ前後のスクショを `/cases` に残すと、自分用の教材として強力
+- Claude Code に「直近 3 PR の merge ログから振り返り Case を書いて」と頼める
+
+<Callout type="tip" title="マージ方式の使い分け">
+  - **Merge commit**: 履歴をそのまま残す（本サイトはこれ）
+  - **Squash and merge**: PR を 1 commit にまとめる（履歴がきれい）
+  - **Rebase and merge**: 線形履歴になる（読みやすいが破壊的）
+
+  チームで 1 つに揃えるのが普通。
+</Callout>
+
+**よくある質問**
+
+- Q: マージ後にミスを発見した → A: Revert PR を作る（`git revert -m 1 <merge-sha>`）
+- Q: ブランチを残すべき？ → A: 普通は削除。長期実験ブランチだけ残す
+- Q: 本番 URL に反映されるまでどれくらい？ → A: Vercel Deployments で `Ready` になればその瞬間から（通常 30 秒〜2 分）
 
 **自分で試すための小さな課題**
 
 - 自分の PR をマージして本番 URL で確認
 
+**ここで詰まったら**: Step 5 の Codex / 人間レビューが残っているなら、まずはそちらを片付けてから。
+
 </section>
+
+## 全体を振り返る
+
+このフローを 1 周すれば、AI 開発の体力が一段上がります。
+
+- **手を動かす**: [/tutorials/github](/tutorials/github) → [/tutorials/vercel](/tutorials/vercel) → [/tutorials/antigravity](/tutorials/antigravity)
+- **実例を読む**: [/cases](/cases) で著者の制作ログ
+- **ツール辞書**: [/tools](/tools) で各ツールの位置づけ
+
+何度か回すと、各ステップで AI に何を任せ、何を人間が判断するかの感覚がつかめます。
