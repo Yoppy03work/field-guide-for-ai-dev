@@ -2,7 +2,7 @@
 title: "Vercel チュートリアル"
 slug: vercel
 status: yellow
-estimatedMinutes: 20
+estimatedMinutes: 25
 difficulty: beginner
 order: 2
 prerequisites:
@@ -14,101 +14,211 @@ import { Callout } from "@/components/Callout";
 
 <Callout type="info" title="このチュートリアルでやること">
   GitHub の repo を Vercel に連携 → 自動 Preview Deploy → main マージで本番更新、
-  までを 20 分でなぞります。
+  までを 25 分でなぞります。最後に「ビルドエラーをわざと起こして読む」
+  練習も入れて、実運用でハマらない体力を付けます。
 </Callout>
 
 ## 前提
 
 - GitHub アカウントを持っている
 - 公開リポジトリが 1 つある（[/tutorials/github](/tutorials/github) で作った `hello-world` で OK）
-- Next.js プロジェクトでなくても動く（静的 HTML でも可）が、Next.js 16 が一番スムーズ
+- Next.js プロジェクトでなくても動く（静的 HTML でも可）。Next.js 16 が一番スムーズ
+- Vercel の無料枠（Hobby プラン）で完結。クレカ不要
 
-## 必須 4 ステップで完走する
+<Callout type="warn" title="🟡 体験範囲の注記">
+  このチュートリアルは、著者がこのサイト（field-guide-for-ai-dev）と
+  別プロジェクト（web3-portfolio）の 2 件で運用した範囲をベースにしています。
+  画面文言や挙動は Vercel のアップデートで変わる可能性があります。
+</Callout>
 
-カスタムドメインや環境変数は本チュートリアルでは扱いません（DNS や課金が絡んで初心者には重い）。
-「余裕があれば」の節に分けています。
+## 全体像
 
-### ステップ 1: GitHub repo と Vercel を連携する
+```text
+1. Vercel にサインイン（GitHub OAuth）
+2. リポジトリを Import
+3. Preview Deploy を見る（PR を作る）
+4. Production Deploy を見る（main にマージ）
+5. ビルドエラーをわざと起こして直す
+```
+
+## ステップ 1: GitHub repo と Vercel を連携する（5 分）
 
 **やること**
 
-1. [https://vercel.com](https://vercel.com) を開いて GitHub でサインイン
-2. `Add New...` → `Project`
-3. リストから対象 repo を選ぶ（無い時は `Adjust GitHub App Permissions`）
-4. Framework Preset で Next.js が自動検出されることを確認
-5. 設定はデフォルトのまま `Deploy`
+1. [https://vercel.com](https://vercel.com) を開く
+2. 右上 `Sign Up` または `Log In` → `Continue with GitHub`
+3. GitHub の認可ダイアログで `Authorize Vercel`
+4. ダッシュボードで `Add New...` → `Project`
+5. 一覧から対象 repo を選んで `Import`
+6. **Framework Preset で Next.js が自動検出**されることを確認
+7. **Configure Project** はそのまま `Deploy` を押す
 
 **期待される結果**
 
-- 1〜2 分で「Congratulations!」画面が出て、本番 URL（`*.vercel.app`）が発行される
+- Build Logs がストリーミング表示される
+- 1〜2 分で「Congratulations!」画面が出て、本番 URL（`<repo>.vercel.app`）が発行
+- 「Continue to Dashboard」でプロジェクト管理画面に着地
 
 **うまくいかない時**
 
-- repo が選択肢に出ない → GitHub App の権限調整で対象 repo を許可
+- repo がリストに出ない → `Adjust GitHub App Permissions` で対象 repo を許可
+- Deploy ボタンが押せない → Configure Project の Root Directory が空欄か `./` になっているか確認
+- Build が失敗（`Error: Command "npm run build" exited with 1`）→ ローカルで `pnpm build` が通るか先に確認、`package.json` の scripts を確認
 
-### ステップ 2: Preview Deploy を見る
+<Callout type="tip" title="無料枠で十分">
+  Vercel Hobby（無料）プランの主な制限：
+  - 商用利用は不可
+  - 月 100GB の帯域
+  - Production と Preview の同時実行数
+
+  授業課題・個人サイト・教材としては余裕あり。
+</Callout>
+
+## ステップ 2: Preview Deploy を見る（5 分）
+
+PR ごとに Preview URL が自動発行されることを体感します。
 
 **やること**
 
-1. 対象 repo に新しいブランチを切って 1 コミット push（README に 1 行追加など）
-2. GitHub 上で Pull Request を作る
-3. PR コメントに Vercel が自動で `Preview` URL を投稿するので開く
+1. 対象 repo の GitHub に戻る
+2. ブランチ切替で `preview-test` を新規作成
+3. README.md を 1 行編集
+4. `Commit directly to the preview-test branch`
+5. `Pull requests` タブ → `New pull request` → base: `main`, compare: `preview-test`
+6. PR を作る
+7. 30 秒〜2 分待つと、PR コメントに **Vercel が自動で `Preview` URL を投稿**
+8. 投稿された Preview URL を開く
 
 **期待される結果**
 
-- ブランチ固有の URL（`*-git-<branch>-*.vercel.app`）で、変更後の状態が見える
+- ブランチ固有の URL（`<repo>-git-preview-test-<user>.vercel.app`）で、変更後の状態が見える
+- 本番 URL は変わっていない（PR がマージされていないので当然）
 
 **うまくいかない時**
 
-- Preview URL が出ない → Vercel ダッシュボードで Build ログを確認
+- Preview コメントが投稿されない → Vercel ダッシュボード → プロジェクト → Deployments で `preview-test` 用の Deployment が走っているか確認
+- Preview URL を開いても古いまま → Vercel CDN のキャッシュ。`?_=now` のようなクエリ付与で再取得
 
-### ステップ 3: Production Deploy（main マージで自動）を見る
+<Callout type="tip" title="Preview URL は commit 別に発行される">
+  実は `<repo>-<sha>.vercel.app` のような commit hash 付き URL も発行されます。
+  「修正前」と「修正後」を別タブで並べてレビューしたいときに便利。
+  Vercel ダッシュボード → Deployments の各行から URL が取れます。
+</Callout>
 
-**やること**
-
-1. PR を Merge する
-2. Vercel ダッシュボードで Deployment が main 用に走るのを確認
-3. 本番 URL を再読み込み
-
-**期待される結果**
-
-- 本番 URL（固定）の中身が、PR の変更後の状態に更新される
-
-### ステップ 4: ビルドエラーを読んで直す
+## ステップ 3: Production Deploy（main マージで自動）を見る（3 分）
 
 **やること**
 
-1. 故意にコード（`page.tsx` など）を壊して push
-2. Vercel ダッシュボード → 失敗した Deployment → Build Logs を開く
-3. エラーメッセージを読み、原因の行を特定して修正
+1. 先ほど作った PR で `Merge pull request` → `Confirm merge`
+2. Vercel ダッシュボードに切り替え
+3. 数十秒以内に **main 用の Deployment** が始まる
+4. Deployment が `Ready` になるのを待つ
+5. 本番 URL（`<repo>.vercel.app`）をリロード
 
 **期待される結果**
 
-- ローカルで `pnpm build` を回しても同じエラーが出ること（Vercel と同じ）
-- 修正コミットを push すると Deployment が green に戻る
+- 本番 URL の中身が、PR の変更後の状態に更新されている
+- 本番 URL の文字列自体は変わっていない（main 用は固定）
+
+**うまくいかない時**
+
+- 本番 URL が更新されない → Vercel Deployments で main の最新 Deployment が `Ready` 表示か確認
+- ブラウザに古い表示が残る → ハードリロード（Ctrl+Shift+R / Cmd+Shift+R）
+
+## ステップ 4: ビルドエラーをわざと起こして直す（10 分）
+
+実運用で必ず一度は遭遇する「ビルドが落ちる」を体験します。
+
+### 4-A. わざと壊す
+
+**やること**
+
+1. ローカル or GitHub Web UI で、本当にビルドに使われるファイルを編集する
+   - Next.js の場合: `src/app/page.tsx` で意図的に書き間違える（例：`<div` で閉じ忘れ）
+   - HTML 静的サイトなら適当な構文エラー
+2. `feat/break-build` ブランチで commit
+3. PR を作る
+
+**期待される結果**
+
+- Vercel ダッシュボードで Build が **失敗（赤バツ）**
+- PR コメントの Vercel 行も「Error」表記
+
+### 4-B. ログを読む
+
+**やること**
+
+1. PR コメントの Vercel 行 → `Inspect` リンクをクリック
+2. 「Build Logs」タブを開く
+3. エラーメッセージを最後から探す（ログは時系列で、エラー行は末尾近くに集中）
+4. ファイル名と行番号を特定する
+
+**期待される結果**
+
+- どのファイルの何行目で何が起きたかが、ログから読み取れる
+
+**うまくいかない時**
+
+- ログが長すぎて見つけられない → 検索（Cmd+F）で `error` `Error` `failed` を探す
+- スタックトレースが分かりにくい → 一番最初の `error:` を起点に読む
+
+<Callout type="tip" title="ローカルで再現する">
+  Vercel と同じエラーをローカルで出せれば、デバッグが速くなります。
+  Vercel と pnpm / Node のバージョンを揃えるのが第一歩。
+  `package.json` の `engines` フィールドを書いておくと、Vercel が
+  自動で揃えてくれます。
+</Callout>
+
+### 4-C. 直して push
+
+**やること**
+
+1. ローカルで該当ファイルを開いて構文を直す
+2. `pnpm build` がローカルで通ることを確認
+3. commit & push
+4. Vercel が自動で再 Deploy を開始
+
+**期待される結果**
+
+- 数分後、Build が `Ready`（緑チェック）に
+- Preview URL が再び開ける状態になる
 
 **うまくいかない時**
 
 - ローカルで再現しない → Node / pnpm のバージョンが Vercel と揃っているか確認
+- 同じエラーが繰り返し出る → ログをもう一度最後まで読み直す（途中の `warning` ではなく `error` を探す）
 
 ## できたか確認
 
 - [ ] GitHub repo を Vercel に連携できた
 - [ ] PR ごとに Preview URL が発行されるのを見た
 - [ ] main マージで本番 URL が自動更新されるのを見た
-- [ ] わざと壊してビルドエラーログを読めた
+- [ ] わざと壊してビルドエラーログを読み、修正できた
+- [ ] 自分の言葉で「main = Production / 他ブランチ = Preview」を 1 行で説明できる
 - [ ] うまくいかなかった場所を 1 つ説明できる
+
+## ハマりどころまとめ
+
+- repo が選択肢に出ない → GitHub App Permissions を再確認
+- Build が失敗してログに `command not found: pnpm` → Vercel Project Settings → Install Command を `pnpm install` に
+- Production と Preview の URL を取り違える → ダッシュボードの Deployments で「Production」バッジ付きが本番
+- 古い Deployment にアクセスしてしまう → URL 末尾の hash を確認
+- 環境変数を Production に設定し忘れる → `.env.local` だけだと Preview / Production には届かない
 
 ## 余裕があれば
 
-- 環境変数の Production / Preview 分け
-- カスタムドメイン接続（DNS / 所有ドメインが必要）
-- Vercel Analytics の最小プラン
+このチュートリアルでは扱わない応用：
 
-これらは本チュートリアルの範囲外。必要になったら公式ドキュメントを参照。
+- **環境変数の Production / Preview / Development 分け** … API キーを誤って Preview に流す事故を防ぐ
+- **カスタムドメイン接続** … DNS / 所有ドメインが必要、課金が絡む場合あり
+- **Vercel Analytics** … アクセス計測の最小プラン
+- **Edge / Serverless Functions** … 動的なバックエンド処理
+
+これらは必要になったら公式ドキュメントを参照してください。
 
 ## 次のステップ
 
 - [/tutorials/antigravity](/tutorials/antigravity) で Preview URL を AI に巡回させる
 - [/tools/vercel](/tools/vercel) で「フローの中での使い方」を整理する
-- [/cases/case-4-vercel-preview](/cases/case-4-vercel-preview) で実例を読む
+- [/cases/case-4-vercel-preview](/cases/case-4-vercel-preview) で著者の実例を読む
+- [/workflow#step-7](/workflow#step-7) で 8 ステップの中での位置づけを確認

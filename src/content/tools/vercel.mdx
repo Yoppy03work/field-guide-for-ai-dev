@@ -7,39 +7,63 @@ icon: "Triangle"
 order: 6
 ---
 
-## このツールをひとことで言うと
+import { Callout } from "@/components/Callout";
+
+## ひとことで言うと
 
 **Next.js を簡単にデプロイできる**。
 GitHub のリポジトリと連携するだけで、main の更新は本番、PR には自動で Preview URL が発行される。
 
-> 🟡 **一部実体験**：このサイト（field-guide-for-ai-dev）と過去の web3-portfolio の 2 件を運用した範囲。
+<Callout type="warn" title="🟡 一部実体験">
+  このサイト（field-guide-for-ai-dev）と過去の web3-portfolio の 2 件を
+  運用した範囲。Edge / Serverless 機能、商用運用は未経験。
+</Callout>
+
+## まずやること
+
+[/tutorials/vercel](/tutorials/vercel) で 25 分のハンズオンが組んであります。
+GitHub repo を 1 つ用意して、以下を回してみるのが早いです：
+
+1. https://vercel.com/new で repo を Import
+2. デフォルトのまま Deploy（1〜2 分）
+3. 別ブランチで PR を出して Preview URL を見る
+4. main にマージして本番 URL が自動更新されるのを見る
 
 ## 開発フローのどこで使うか
 
-- [Step 7: Vercel Preview で確認する](/workflow#step-7)
-- main に Merge → 本番 URL が自動更新（URL は固定）
+- [Step 7: Vercel Preview で確認する](/workflow#step-7) … PR ごとの実機確認
+- [Step 8: Merge して公開する](/workflow#step-8) … main 更新で本番自動デプロイ
+- 教材としても、PR ベースのフローを「実装 → 即動く URL でレビュー」に変える効果が大きい
 
 ## 実際に試したこと
 
-- このサイトを GitHub repo から Import → Public 公開
-- 過去に web3-portfolio をデプロイ、PR Preview を運用
+- このサイト：GitHub repo から Import → Public 公開、現状 25+ ルートを運用
+- 過去：web3-portfolio をデプロイ、PR Preview を実運用
+- 設定はほぼ Framework Preset の自動検出に任せた
 
 ## 効果があったこと
 
-- 設定がほぼゼロ（Framework Preset で Next.js を自動検出）
-- PR Preview URL でレビュー時の「実機確認」がほぼ無料
+- 設定がほぼゼロ（Framework Preset で Next.js / Tailwind v4 / pnpm を自動検出）
+- PR Preview URL で「コードレビュー前に実機確認」がほぼ無料
+- main 自動デプロイで「マージしたら 30 秒で本番」のリズムが作れる
+- Build ログがダッシュボードに揃うので、CI/CD が初心者にも見える
 
-## 微妙だったこと
+## よくある失敗
 
-- ビルド設定でハマるとログ画面でグルグル見る羽目になる
-- Production と Preview の環境変数を分けないと事故る
+- ビルド設定でハマったときに Build Logs を読まずに諦める → Cmd+F で `error` を検索
+- 環境変数を `.env.local` だけに置く → Vercel 側 (Production / Preview / Development) に登録しないと届かない
+- Preview と Production の URL を取り違えて報告 → ダッシュボードの「Production」バッジを確認
+- repo を Private にしてから無料枠の制限に当たる → 商用利用は Pro プラン
 
 ## 駆け出しが最初に試すなら
 
-1. GitHub に Public リポジトリを作る
-2. https://vercel.com/new で Import
-3. デフォルトのまま Deploy → 1〜2 分で公開 URL が出る
+1. GitHub に Public リポジトリを作る（[/tutorials/github](/tutorials/github) のあと）
+2. [/tutorials/vercel](/tutorials/vercel) を 25 分でなぞる
+3. ビルドエラーをわざと起こして Build Logs を読む練習をする
 
-## 関連
+## 次に読むページ
 
-- Case 4: Vercel Preview で確認した（執筆予定）
+- [/tutorials/vercel](/tutorials/vercel) … 25 分のハンズオン
+- [/cases/case-4-vercel-preview](/cases/case-4-vercel-preview) … 著者の実例（運用感）
+- [/workflow#step-7](/workflow#step-7) … 8 ステップの中での位置づけ
+- [/tools/antigravity](/tools/antigravity) … Preview URL を AI に巡回させる
