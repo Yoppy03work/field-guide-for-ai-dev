@@ -11,8 +11,20 @@ GitHub の基本から、Issue → PR → Review → Deploy までを 1 つの�
 
 ## こだわりポイント
 
-主役はAIツール紹介でなく、開発フロー（Issue → Merge）のどこに差し込むかを駆け出し向けに解説したこと。
-専門用語には必ず **「ひとことで言うと」** を併記し、🟢🟡🔵 で情報源（実体験 / 一部 / 調査）を明示します。
+合言葉は **「全ページを厚くする、ではなく、全ページから次の一歩を踏めるようにする」**。
+
+- 主役は AI ツール紹介ではなく、開発フロー（Issue → Merge）のどこに差し込むか
+- 専門用語には必ず **「ひとことで言うと」** を併記
+- 🟢🟡🔵 で情報源（実体験 / 一部 / 調査）を明示
+- ページ間の役割分担：`/learn` = 概念 / `/tutorials` = 操作 / `/tools` = フローの中で / `/cases` = 実例
+- 教材ページに共通 4 ブロック（ひとこと / まずやる / よくある失敗 / 次に読む）
+
+## 制作経過
+
+| 期 | PR # | 概要 |
+|---|---|---|
+| 第 1 期 MVP | #1〜#15 | 初期 4 ページ → 16 ルート + Vercel 公開 + a11y polish |
+| 第 2 期 教材化 | #16〜#25 | Codex P1 修正 / AX foundation / UX core 5 components / `/tutorials` 新設 / 全ページ厚塗り / Home + About 仕上げ |
 
 ## 対象読者
 
@@ -20,18 +32,21 @@ GitHub の基本から、Issue → PR → Review → Deploy までを 1 つの�
 - GitHub の Issue / Branch / PR / Merge をまだ使い慣れていない可能性
 - AI ツールは ChatGPT 程度しか触ったことがない人
 
-## サイト構成（実装済み 16 ルート）
+## サイト構成（実装済み 20 ルート）
 
 | URL | 内容 |
 |---|---|
-| [`/`](https://field-guide-for-ai-dev.vercel.app/) | ホーム（「まずはここから」中心） |
-| [`/learn/github`](https://field-guide-for-ai-dev.vercel.app/learn/github) | GitHub 入門（9 セクション + ミニ課題） |
-| [`/workflow`](https://field-guide-for-ai-dev.vercel.app/workflow) | 中心ページ（Mermaid + 8 ステップ） |
+| [`/`](https://field-guide-for-ai-dev.vercel.app/) | ホーム（推奨ルート + フロー要約 + 7 ツール早見 + Cases + FAQ + ミニ課題 CTA） |
+| [`/learn/github`](https://field-guide-for-ai-dev.vercel.app/learn/github) | GitHub 入門（9 セクション + 各セクションに「もう一歩深く」「よくある失敗」+ ミニ課題） |
+| [`/workflow`](https://field-guide-for-ai-dev.vercel.app/workflow) | 中心ページ（Mermaid + 8 ステップ、各ステップに実プロンプト・Q&A・cross-step リンク） |
+| [`/tutorials`](https://field-guide-for-ai-dev.vercel.app/tutorials) | ハンズオン一覧（推奨ルート + 所要時間 + 難易度） |
+| `/tutorials/[slug]` | GitHub / Vercel / Antigravity の 3 ハンズオン（SSG、各ステップに「期待される結果 / うまくいかない時 / セルフチェック」） |
 | [`/tools`](https://field-guide-for-ai-dev.vercel.app/tools) | ツール一覧（🟢 のみフィルタ付き） |
-| `/tools/[slug]` | 各ツール詳細（GitHub / Claude Code / Codex / Copilot / Antigravity / Vercel / 他 AI の 7 本、SSG） |
+| `/tools/[slug]` | 7 ツール詳細（GitHub / Claude Code / Codex / Copilot / Antigravity / Vercel / 他 AI、共通 4 ブロック構成、SSG） |
 | [`/cases`](https://field-guide-for-ai-dev.vercel.app/cases) | 制作ログ（4 本） |
-| `/cases/[slug]` | Case 1〜4 の詳細（SSG） |
-| [`/about`](https://field-guide-for-ai-dev.vercel.app/about) | サイトの目的・著者・ライセンス |
+| `/cases/[slug]` | Case 1〜4 の詳細（プロンプト全公開 + Lessons Learned + 再現手順、SSG） |
+| [`/about`](https://field-guide-for-ai-dev.vercel.app/about) | サイトの目的・著者・ライセンス・制作タイムライン |
+| カスタム 404 | 「地図にないページです」+ 主要ページへ誘導 |
 | `/sitemap.xml` / `/robots.txt` | SEO 最小セット |
 
 ## ソース・バッジ
@@ -74,7 +89,7 @@ pnpm lint
 pnpm typecheck
 ```
 
-> Node.js 20 LTS / pnpm 9 以上を推奨。
+> Node.js 20 LTS / pnpm 10 を推奨。
 
 ## 開発フロー（このリポジトリの運用）
 
@@ -107,8 +122,11 @@ pnpm typecheck
 | [`docs/09_claude-brief.md`](docs/09_claude-brief.md) | 方針指示書（最重要） |
 | [`docs/11_prompts.md`](docs/11_prompts.md) | Claude Code への実プロンプト集 |
 | [`docs/14_github-templates.md`](docs/14_github-templates.md) | Issue / PR / CI テンプレ原本 |
+| [`docs/15_components.md`](docs/15_components.md) | MDX で使えるコンポーネントの仕様 |
+| [`docs/16_content-recipe.md`](docs/16_content-recipe.md) | ページタイプ別の書き方の型 |
 | [`CLAUDE.md`](CLAUDE.md) | Claude Code 向け文脈ファイル |
 | [`AGENTS.md`](AGENTS.md) | 他 AI（Codex / Antigravity / Gemini）向け指針 |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | 人間向け onboarding |
 
 ## 貢献
 
