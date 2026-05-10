@@ -1,10 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 
 /**
  * ページ全体のスクロール進捗を上部に細いバーで表示する。
  * /learn/* /tutorials/* /workflow など長文ページで使う。
+ *
+ * 動的な進捗値は CSS カスタムプロパティ `--reading-progress` 経由で
+ * Tailwind の arbitrary value に渡し、`transform: scaleX(...)` を
+ * Tailwind ユーティリティで適用する。`style` 属性に残るのは CSS 変数
+ * 1 行のみ（state-driven な値の標準パターン）。
  */
 export function ReadingProgress() {
   const [progress, setProgress] = useState(0);
@@ -30,6 +35,10 @@ export function ReadingProgress() {
     };
   }, []);
 
+  const cssVars: CSSProperties = {
+    "--reading-progress": String(progress),
+  } as CSSProperties;
+
   return (
     <div
       role="progressbar"
@@ -37,12 +46,8 @@ export function ReadingProgress() {
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={Math.round(progress * 100)}
-      className="fixed inset-x-0 top-0 z-40 h-0.5 bg-transparent"
-    >
-      <div
-        className="h-full bg-[#2F5D3A] transition-[width] duration-150"
-        style={{ width: `${progress * 100}%` }}
-      />
-    </div>
+      style={cssVars}
+      className="fixed inset-x-0 top-0 z-40 h-0.5 origin-left bg-[#2F5D3A] transition-transform duration-150 motion-reduce:transition-none scale-x-[var(--reading-progress)]"
+    />
   );
 }
