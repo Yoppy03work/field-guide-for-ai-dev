@@ -47,7 +47,7 @@ export function ReadingProgress() {
       aria-valuemax={100}
       aria-valuenow={Math.round(progress * 100)}
       style={cssVars}
-      className="fixed inset-x-0 top-0 z-40 h-0.5 origin-left bg-[#2F5D3A] transition-transform duration-150 motion-reduce:transition-none scale-x-[var(--reading-progress)]"
+      className="fixed inset-x-0 top-0 z-[55] h-0.5 origin-left bg-[#2F5D3A] transition-transform duration-150 motion-reduce:transition-none scale-x-[var(--reading-progress)]"
     />
   );
 }
