@@ -134,17 +134,46 @@
 | Antigravity 体験記の素材不足 | Case 3 が薄い | 実際に何度か Antigravity を使ってログを残す |
 | 1〜2 週間で全部終わらない | 公開遅延 | Pagefind/RSS/ダーク等は Phase 2、ツールページの薄さは許容 |
 
-## Phase 2（公開後にやりたいこと）
+## 第 1 期完了サマリ（PR #1〜#15）
 
-- Pagefind 検索
-- RSS フィード
+第 1 期の MVP は 1 日で 16 ルートまで実装、Vercel 公開、a11y polish まで完了。
+詳細は [README.md](../README.md#制作経過) と [/cases](https://field-guide-for-ai-dev.vercel.app/cases) を参照。
+
+## 第 2 期完了サマリ（PR #16〜#25、合言葉「次の一歩を踏める」）
+
+| Phase | PR | 概要 | merge |
+|---|---|---|---|
+| 0 | #16 | Codex PR #9 P1 critical 修正（`Object.hasOwn`） | ✅ |
+| 1 | #17 | AX foundation（CLAUDE / AGENTS / CONTRIBUTING / 15_components / 16_content-recipe / PR template） | ✅ |
+| 2 | #18 | UX core 5 components（Callout / RelatedPages / Breadcrumb / CodeBlock / ReadingTime）+ Codex P1/P2 ×4 対応 | ✅ |
+| 3 | #19 | `/tutorials/` 骨組み + 3 tutorial 雛形 + TutorialFrontmatter | ✅ |
+| 4 | #20 | GitHub 2 ページ厚塗り（`/tutorials/github` 270 行 / `/learn/github` 338 行） | ✅ |
+| 5 | #21 | Vercel + Antigravity の tutorial / tools 厚塗り | ✅ |
+| 6 | #22 | `/workflow` 厚塗り（251 → 432 行） | ✅ |
+| 7 | #23 | `/cases` 4 本厚塗り（プロンプト全公開 + Lessons + 再現手順） | ✅ |
+| 8 | #24 | 残り 5 ツール厚塗り（共通 4 ブロック） | ✅ |
+| 9 | #25 | Home（推奨ルート + FAQ + ミニ課題 CTA）+ About タイムライン + 一覧 Breadcrumb | ✅ |
+
+第 2 期で達成したこと：
+- 教材ページに **共通 4 ブロック**（ひとこと / まずやる / 失敗 / 次へ）
+- ページ間の **役割分担**（`/learn` 概念、`/tutorials` 操作、`/tools` フローの中で、`/cases` 実例）
+- **`/tutorials` サブツリー**（GitHub / Vercel / Antigravity の 3 ハンズオン、各 15〜35 分）
+- **AX 基盤**（CLAUDE / AGENTS / CONTRIBUTING / 15_components / 16_content-recipe）
+- **UX core 5 components**（Callout / RelatedPages / Breadcrumb / CodeBlock / ReadingTime）
+- 全 PR で **Codex レビュー対応運用**（PR description に「対応済み / 対応しない理由 / Issue 化」を明記）
+
+## Phase 3（後送り、公開後にやりたいこと）
+
+- AnchorHeading（h2/h3 ホバー `#`）
+- Reading progress バー
+- Pagefind 全文検索
+- 動的 OG 画像（next/og + 日本語 font）
 - ダークモード
-- 記事別 OG 画像
-- Framer Motion を使った高度なアニメーション
 - ツール比較表ページ
 - 多言語対応（英語版）
 - 読者からのフィードバック反映
 - Cases の追加（毎週 1 本ペース）
+- Antigravity を本サイトで実運用 → Case 3 を 🟡 → 🟢 に
 
 ## ハッカソン GitHub 資料の扱い
 
