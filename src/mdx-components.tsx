@@ -5,6 +5,7 @@ import type {
   OlHTMLAttributes,
 } from "react";
 import { CodeBlock } from "@/components/CodeBlock";
+import { AnchorHeading } from "@/components/AnchorHeading";
 
 const headingBase = "scroll-mt-24 font-semibold tracking-tight text-[#1F2937]";
 
@@ -16,10 +17,18 @@ const defaultComponents: MDXComponents = {
     />
   ),
   h2: (props: HTMLAttributes<HTMLHeadingElement>) => (
-    <h2 {...props} className={`${headingBase} text-2xl mt-10 mb-4`} />
+    <AnchorHeading
+      level={2}
+      {...props}
+      className={`${headingBase} text-2xl mt-10 mb-4`}
+    />
   ),
   h3: (props: HTMLAttributes<HTMLHeadingElement>) => (
-    <h3 {...props} className={`${headingBase} text-xl mt-8 mb-3`} />
+    <AnchorHeading
+      level={3}
+      {...props}
+      className={`${headingBase} text-xl mt-8 mb-3`}
+    />
   ),
   p: (props: HTMLAttributes<HTMLParagraphElement>) => (
     <p

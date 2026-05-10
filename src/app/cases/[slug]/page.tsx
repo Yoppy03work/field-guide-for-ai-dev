@@ -7,6 +7,7 @@ import Case3Mdx from "@/content/cases/case-3-antigravity-screen-check.mdx";
 import Case4Mdx from "@/content/cases/case-4-vercel-preview.mdx";
 import { getContentBySlug } from "@/lib/mdx";
 import { StatusBadge } from "@/components/StatusBadge";
+import { ReadingProgress } from "@/components/ReadingProgress";
 
 const CASE_COMPONENTS = {
   "case-1-claude-code-ui": Case1Mdx,
@@ -60,7 +61,9 @@ export default async function CaseDetailPage({
   const { frontmatter } = await getContentBySlug("cases", typedSlug);
 
   return (
-    <article className="mx-auto max-w-[820px] px-4 py-10 md:px-6 md:py-16">
+    <>
+      <ReadingProgress />
+      <article className="mx-auto max-w-[820px] px-4 py-10 md:px-6 md:py-16">
       <header className="mb-8">
         <div className="flex flex-wrap items-center gap-3">
           <StatusBadge status={frontmatter.status} />
@@ -128,6 +131,7 @@ export default async function CaseDetailPage({
           </Link>
         </p>
       </footer>
-    </article>
+      </article>
+    </>
   );
 }

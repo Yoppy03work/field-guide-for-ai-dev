@@ -8,6 +8,7 @@ import AntigravityMdx from "@/content/tutorials/antigravity.mdx";
 import { getContentBySlug } from "@/lib/mdx";
 import { StatusBadge } from "@/components/StatusBadge";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { ReadingProgress } from "@/components/ReadingProgress";
 
 const TUTORIAL_COMPONENTS = {
   github: GithubMdx,
@@ -58,7 +59,9 @@ export default async function TutorialDetailPage({
   const { frontmatter } = await getContentBySlug("tutorials", typedSlug);
 
   return (
-    <article className="mx-auto max-w-[820px] px-4 py-10 md:px-6 md:py-16">
+    <>
+      <ReadingProgress />
+      <article className="mx-auto max-w-[820px] px-4 py-10 md:px-6 md:py-16">
       <Breadcrumb
         items={[
           { href: "/", label: "ホーム" },
@@ -114,6 +117,7 @@ export default async function TutorialDetailPage({
           </Link>
         </p>
       </footer>
-    </article>
+      </article>
+    </>
   );
 }

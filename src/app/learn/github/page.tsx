@@ -4,6 +4,7 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { Toc, type TocItem } from "@/components/Toc";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { ReadingTime } from "@/components/ReadingTime";
+import { ReadingProgress } from "@/components/ReadingProgress";
 
 export const metadata: Metadata = {
   title: "GitHub 入門 | AI Dev Field Guide",
@@ -30,7 +31,9 @@ const APPROX_READING_MINUTES = 18;
 
 export default function LearnGitHubPage() {
   return (
-    <div className="mx-auto max-w-[1200px] px-4 py-8 md:px-6 md:py-12 lg:grid lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-12">
+    <>
+      <ReadingProgress />
+      <div className="mx-auto max-w-[1200px] px-4 py-8 md:px-6 md:py-12 lg:grid lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-12">
       <article className="min-w-0 max-w-[720px]">
         <Breadcrumb
           items={[
@@ -59,6 +62,7 @@ export default function LearnGitHubPage() {
       <aside className="hidden lg:sticky lg:top-20 lg:block lg:h-fit">
         <Toc items={TOC} />
       </aside>
-    </div>
+      </div>
+    </>
   );
 }

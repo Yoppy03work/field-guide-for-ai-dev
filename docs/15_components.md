@@ -12,6 +12,8 @@
 - [Breadcrumb](#breadcrumb) … パンくずリスト
 - [CodeBlock](#codeblock) … コピーボタン付きコードブロック（自動適用）
 - [ReadingTime](#readingtime) … 読了時間表示
+- [AnchorHeading](#anchorheading) … h2 / h3 にホバー # アイコン
+- [ReadingProgress](#readingprogress) … 上部のスクロール進捗バー
 - [Mermaid](#mermaid) … クライアント描画の図
 - [Toc](#toc) … 目次（page.tsx で使う、MDX では使わない）
 - [StepCard / MiniTask](#stepcard--minitask) … チュートリアル課題
@@ -206,6 +208,42 @@ type ReadingTimeProps = {
 ```
 
 算出ロジックは `src/lib/reading-time.ts` の `estimateReadingMinutes` を使う。
+
+## AnchorHeading
+
+`mdx-components.tsx` で h2 / h3 を自動的にこのコンポーネントに置換しているので、MDX で
+直接 import することは通常ない。挙動：
+
+- 見出し ID は `id` 属性指定があればそれを、無ければ見出しテキストから slug を生成
+- ホバー / フォーカスで `#` アイコンを表示
+- アイコンクリックで「現在の URL + #id」をクリップボードにコピー（失敗時はフォールバックでハッシュ更新）
+
+**型**:
+
+```ts
+type AnchorHeadingProps = HTMLAttributes<HTMLHeadingElement> & {
+  level: 2 | 3;
+};
+```
+
+**禁則**:
+- h1 には使わない（ページのトップ見出しに `#` リンクは不要）
+- 動的な見出しテキストには `id` を明示する（slug が安定しない可能性）
+
+## ReadingProgress
+
+長文ページ（`/learn/*` `/tutorials/*` `/workflow` `/cases/*`）の上部に細い進捗バーを表示する。
+クライアント側で `window.scrollY` を見る `"use client"` コンポーネント。
+
+```tsx
+import { ReadingProgress } from "@/components/ReadingProgress";
+
+<ReadingProgress />
+```
+
+**禁則**:
+- 短いページ（`/about` `/tools` 一覧、`/cases` 一覧）には付けない（無意味）
+- 1 ページに 2 個置かない
 
 ## Mermaid
 

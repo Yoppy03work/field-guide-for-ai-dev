@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import WorkflowMdx from "@/content/workflow/steps.mdx";
 import { StatusBadge } from "@/components/StatusBadge";
 import { Toc, type TocItem } from "@/components/Toc";
+import { Breadcrumb } from "@/components/Breadcrumb";
+import { ReadingProgress } from "@/components/ReadingProgress";
 
 export const metadata: Metadata = {
   title: "AI 開発フローの全体像 | AI Dev Field Guide",
@@ -22,8 +24,16 @@ const TOC: readonly TocItem[] = [
 
 export default function WorkflowPage() {
   return (
-    <div className="mx-auto max-w-[1200px] px-4 py-8 md:px-6 md:py-12 lg:grid lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-12">
+    <>
+      <ReadingProgress />
+      <div className="mx-auto max-w-[1200px] px-4 py-8 md:px-6 md:py-12 lg:grid lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-12">
       <article className="min-w-0 max-w-[820px]">
+        <Breadcrumb
+          items={[
+            { href: "/", label: "ホーム" },
+            { label: "ワークフロー" },
+          ]}
+        />
         <header className="mb-8">
           <StatusBadge status="green" />
           <h1 className="mt-4 text-3xl font-bold tracking-tight text-[#1F2937] md:text-4xl">
@@ -47,6 +57,7 @@ export default function WorkflowPage() {
       <aside className="hidden lg:sticky lg:top-20 lg:block lg:h-fit">
         <Toc items={TOC} />
       </aside>
-    </div>
+      </div>
+    </>
   );
 }
